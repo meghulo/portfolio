@@ -267,7 +267,7 @@ function closeLB() {
 }
 $('#lb').addEventListener('click', e => { if(e.target.id === 'lb') closeLB(); });
 
-// Contact Form Submission
+// ✅ Contact Form Submission (Netlify)
 $('#contact-form').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = $('#submit-btn');
@@ -319,7 +319,12 @@ async function boot() {
   $('#hero-tagline').textContent = D.site.tagline || '';
   $('#year').textContent = new Date().getFullYear();
 
-  $('#nav-links').innerHTML = D.sections.map(s => `<a href="#${esc(s.id)}">${esc(s.name)}</a>`).join('') + '<a href="#contact">যোগাযোগ</a>';
+  // ✅ নেভিগেশন লিংক তৈরি (শুধু একবার "যোগাযোগ" যোগ হবে)
+  const navLinks = D.sections.map(s => {
+    if (s.id === 'contact') return ''; // content.json-এ থাকা "যোগাযোগ" সেকশন বাদ
+    return `<a href="#${esc(s.id)}">${esc(s.name)}</a>`;
+  }).join('');
+  $('#nav-links').innerHTML = navLinks + '<a href="#contact">যোগাযোগ</a>';
 
   renderSections();
 }
