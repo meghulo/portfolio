@@ -178,6 +178,14 @@ footer a:hover { text-decoration: underline; }
   </div>
 </footer>
 
+<!-- ✅ Netlify Form Detection Blueprint (লুকানো ফর্ম) -->
+<form name="contact" data-netlify="true" hidden>
+  <input type="hidden" name="form-name" value="contact" />
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <textarea name="message"></textarea>
+</form>
+
 <div id="lb">
   <div class="lb-content" id="lb-content"></div>
 </div>
@@ -207,6 +215,7 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
   updateThemeUI(false);
 }
 
+// Sections Rendering
 function renderSections() {
   let html = '';
   D.sections.forEach((sec, idx) => {
@@ -247,6 +256,7 @@ function renderSections() {
   $('#main-content').innerHTML = html;
 }
 
+// Lightbox
 function openLB(secId, itemIndex) {
   const sec = D.sections.find(s => s.id === secId);
   const item = sec.items[itemIndex];
@@ -268,7 +278,6 @@ function closeLB() {
 $('#lb').addEventListener('click', e => { if(e.target.id === 'lb') closeLB(); });
 
 // ✅ Contact Form Submission (Netlify)
-// ✅ Contact Form Submission (Netlify)
 $('#contact-form').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = $('#submit-btn');
@@ -282,8 +291,8 @@ $('#contact-form').addEventListener('submit', async e => {
   const data = new URLSearchParams(formData).toString();
 
   try {
-    // ✅ Netlify-এর স্ট্যাটিক স্কেলেটন ফাইলে POST করা হচ্ছে
-    const res = await fetch('/__forms.html', {
+    // Netlify AJAX form submission always targets the root path "/"
+    const res = await fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: data
@@ -323,7 +332,7 @@ async function boot() {
   $('#hero-tagline').textContent = D.site.tagline || '';
   $('#year').textContent = new Date().getFullYear();
 
-  // ✅ নেভিগেশন লিংক তৈরি (শুধু একবার "যোগাযোগ" যোগ হবে)
+  // নেভিগেশন লিংক তৈরি (শুধু একবার "যোগাযোগ" যোগ হবে)
   const navLinks = D.sections.map(s => {
     if (s.id === 'contact') return ''; // content.json-এ থাকা "যোগাযোগ" সেকশন বাদ
     return `<a href="#${esc(s.id)}">${esc(s.name)}</a>`;
@@ -334,11 +343,5 @@ async function boot() {
 }
 boot();
 </script>
-  <!-- Netlify Form Detection (hidden static form) -->
-<form name="contact" data-netlify="true" hidden>
-  <input type="text" name="name" />
-  <input type="email" name="email" />
-  <textarea name="message"></textarea>
-</form>
 </body>
 </html>
