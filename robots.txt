@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://REPLACE_DOMAIN/sitemap.xml
+
+# AI agents: see /llms.txt, /agent.json and /ai.html
