@@ -1,0 +1,13 @@
+{
+  "name": "সুকেশ খীসা — Sukesh Khisa",
+  "short_name": "Sukesh Khisa",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ecebe5",
+  "theme_color": "#ecebe5",
+  "lang": "bn",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
