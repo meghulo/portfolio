@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ecebe5">
+<title>সুকেশ খীসা — Sukesh Khisa</title>
+<meta name="description" content="ইন্টার্ন সাংবাদিক ও ক্রিয়েটিভ প্রফেশনাল, রাঙামাটি। দেয়ালে আমার কাজ, খাতায় আমার ভাবনা।">
+<link rel="canonical" href="https://REPLACE_DOMAIN/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="সুকেশ খীসা — Sukesh Khisa">
+<meta property="og:description" content="ইন্টার্ন সাংবাদিক ও ক্রিয়েটিভ প্রফেশনাল, রাঙামাটি।">
+<meta property="og:image" content="favicon.svg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="alternate" type="application/json" href="agent.json" title="Agent profile">
+<link rel="alternate" type="text/markdown" href="llms.txt" title="llms.txt">
+<link rel="alternate" type="text/html" href="ai.html" title="Static page for AI agents">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ecebe5; --ink:#12161a; --green:#2f5d50; --muted:#5b6469;
+  --line:rgba(18,22,26,.14);
+  --serif:'Noto Serif Bengali',Georgia,serif;
+  --sans:'Hind Siliguri',system-ui,sans-serif;
+  --pad:clamp(20px,5vw,72px);
+  --sun:clamp(16px,2.4vw,40px);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font:17px/1.7 var(--sans);min-height:100dvh;transition:background .4s,color .4s}
+body.ai{background:#0f1316;color:#d9e1e4}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+/* Header */
+.hd{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:max(18px,env(safe-area-inset-top)) max(var(--pad),env(safe-area-inset-right))
+           18px max(var(--pad),env(safe-area-inset-left));
+    max-width:1560px;margin-inline:auto}
+.brand{font:600 17px var(--serif)}
+.sw{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px}
+.sw button{border-radius:99px;padding:7px 16px;font-size:14px;opacity:.6;min-height:36px}
+.sw button.on{background:var(--ink);color:var(--paper);opacity:1}
+body.ai .sw{border-color:#ffffff28}
+body.ai .sw button.on{background:#d9e1e4;color:#0f1316}
+
+/* Hero */
+.hero{padding:clamp(40px,12vh,140px) max(var(--pad),env(safe-area-inset-right))
+      0 max(var(--pad),env(safe-area-inset-left));
+      max-width:1560px;margin-inline:auto}
+.role{color:var(--muted);font-size:clamp(15px,1.6vw,19px)}
+h1{font:600 clamp(38px,11vw,150px)/1.2 var(--serif);letter-spacing:-.02em;margin:6px 0 0;overflow-wrap:anywhere}
+.ridge{position:relative;margin-top:clamp(10px,3vw,40px)}
+.ridge svg{display:block;width:100%;height:auto}
+.ridge path{fill:none;stroke:var(--ink);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.ridge .r1{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 2.6s .2s cubic-bezier(.5,0,.2,1) forwards}
+.ridge .r2{stroke:var(--green);opacity:.7;stroke-dasharray:1;stroke-dashoffset:1;animation:dr 3.2s .6s cubic-bezier(.5,0,.2,1) forwards}
+.sun{position:absolute;left:75.42%;top:20.91%;width:var(--sun);height:var(--sun);
+     transform:translate(-50%,-50%);border:1.4px solid var(--green);border-radius:50%;
+     opacity:0;animation:fi 1s 2.4s forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+@keyframes fi{to{opacity:1}}
+
+/* Index */
+.idx{padding:clamp(30px,6vw,70px) max(var(--pad),env(safe-area-inset-right))
+     clamp(40px,8vw,80px) max(var(--pad),env(safe-area-inset-left));
+     max-width:1560px;margin-inline:auto;border-top:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+     padding:22px 0;border-bottom:1px solid var(--line);transition:padding .3s,color .3s}
+@media(hover:hover){.row:hover{padding-left:16px;color:var(--green)}}
+.row b{font:400 clamp(22px,3.2vw,36px)/1.3 var(--serif)}
+.row span{display:block;color:var(--muted);font-size:15px;margin-top:2px}
+.row small{color:var(--muted);font-size:13px;flex:none;text-align:right}
+
+/* Section page */
+#pg{padding:30px max(var(--pad),env(safe-area-inset-right))
+    clamp(50px,8vw,90px) max(var(--pad),env(safe-area-inset-left));
+    max-width:1560px;margin-inline:auto;animation:up .5s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.back{display:inline-block;margin-bottom:clamp(20px,4vw,34px);color:var(--muted);padding:6px 0}
+.back:hover{color:var(--green)}
+.kind{color:var(--green);font-size:14px;letter-spacing:.02em}
+#pg h2{font:600 clamp(32px,6vw,72px)/1.25 var(--serif);letter-spacing:-.01em}
+.desc{color:var(--muted);max-width:560px;margin:6px 0 clamp(28px,6vw,60px)}
+
+/* Gallery (wall) */
+.gal{columns:1;column-gap:clamp(18px,3vw,44px)}
+@media(min-width:640px){.gal{columns:2}}
+@media(min-width:1000px){.gal{columns:3}}
+.gal figure{break-inside:avoid;margin:0 0 clamp(22px,3vw,44px);display:block;width:100%;
+            text-align:left;padding:0;cursor:zoom-in}
+.gal img{width:100%;display:block;background:#dcd8cc}
+.ph{display:flex;align-items:flex-end;padding:16px;font:600 20px/1.3 var(--serif);
+    width:100%;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.gal figcaption{margin-top:10px;font:400 16px var(--serif)}
+.gal figcaption small{display:block;font:400 14px var(--sans);color:var(--muted);margin-top:2px}
+
+/* Notes (notebook) */
+.nt{max-width:660px}
+.nt article{padding-bottom:clamp(24px,4vw,34px);margin-bottom:clamp(24px,4vw,34px);border-bottom:1px solid var(--line)}
+.nt h3{font:600 clamp(22px,3vw,28px)/1.35 var(--serif);margin-bottom:8px}
+.nt p{line-height:1.95}
+.nt img{width:100%;margin:14px 0;border-radius:2px}
+.nt .l{display:inline-block;color:var(--green);border-bottom:1px solid;margin:8px 16px 0 0;padding:2px 0}
+
+/* Next/prev */
+.nx{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(30px,5vw,50px);
+    color:var(--muted);flex-wrap:wrap}
+.nx a:hover{color:var(--green)}
+@media(hover:none){.nx a{padding:10px 0}}
+
+/* Footer */
+.ft{padding:0 max(var(--pad),env(safe-area-inset-right))
+    max(30px,env(safe-area-inset-bottom)) max(var(--pad),env(safe-area-inset-left));
+    max-width:1560px;margin-inline:auto;border-top:1px solid var(--line);
+    display:flex;gap:20px;flex-wrap:wrap;padding-top:20px;font-size:14px;color:var(--muted)}
+.ft a:hover{color:var(--green)}
+
+/* Lightbox */
+#lb{position:fixed;inset:0;z-index:30;background:#ecebe5f2;display:none;
+    align-items:center;justify-content:center;
+    padding:max(24px,env(safe-area-inset-top)) 24px}
+#lb.on{display:flex}
+#lb .box{max-width:760px;max-height:100%;overflow:auto;padding:0 8px}
+#lb img{max-width:100%;max-height:66vh;display:block;margin:0 auto 14px}
+#lb h3{font:600 24px var(--serif);margin-bottom:6px}
+#lb p{margin-bottom:10px}
+#lb a{color:var(--green);border-bottom:1px solid;margin-right:16px;padding:2px 0}
+#lb .x{position:absolute;top:max(10px,env(safe-area-inset-top));right:10px;
+       width:48px;height:48px;font-size:30px;line-height:1;border-radius:50%}
+#lb .ln{position:absolute;top:50%;width:46px;height:46px;margin-top:-23px;
+        border-radius:50%;border:1px solid var(--line);background:#ecebe5cc;font-size:24px}
+#lb .p{left:10px}#lb .n{right:10px}
+@media(max-width:600px){
+  #lb .ln{top:auto;bottom:max(16px,env(safe-area-inset-bottom));margin:0}
+  #lb .p{left:20px}#lb .n{right:20px}
+  #lb .box{padding-bottom:70px}
+}
+
+/* AI view */
+.ai-in{max-width:820px;margin-inline:auto;
+       padding:clamp(30px,8vh,90px) max(var(--pad),env(safe-area-inset-right))
+              80px max(var(--pad),env(safe-area-inset-left));
+       font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.75}
+.ai-in .mn{color:#7fd1b0}
+.ai-in h2{font:600 clamp(24px,4vw,40px)/1.3 var(--serif);margin:10px 0 18px;color:#fff}
+.ai-in a{color:#7fd1b0;border-bottom:1px solid #7fd1b055}
+.ai-in ul{list-style:none;padding:0;margin:18px 0}
+.ai-in li{padding:4px 0}
+.ai-in pre{background:#0a0d0f;border:1px solid #ffffff1c;border-radius:10px;
+           padding:16px;overflow:auto;max-height:52vh;font-size:12.5px;margin-top:16px}
+.cp{margin-top:12px;border:1px solid #7fd1b0;color:#7fd1b0;border-radius:99px;padding:8px 20px}
+
+@media(prefers-reduced-motion:reduce){
+  .ridge .r1,.ridge .r2{animation:none;stroke-dashoffset:0}
+  .sun{animation:none;opacity:1}
+  #pg{animation:none}
+  *{scroll-behavior:auto!important}
+}
+@media(min-width:1800px){body{font-size:19px}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <a class="brand" id="brand" href="#"></a>
+  <div class="sw" role="tablist" aria-label="ভিউ">
+    <button data-view="" role="tab" aria-selected="true">মানুষ</button>
+    <button data-view="ai" role="tab" aria-selected="false">এআই</button>
+  </div>
+</header>
+
+<main id="human">
+  <section class="hero">
+    <p class="role" id="role"></p>
+    <h1 id="ttl"></h1>
+    <div class="ridge">
+      <svg viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+        <path class="r1" pathLength="1" d="M0 178C90 160 130 96 215 116S330 44 430 92 570 160 660 106 810 24 910 84 1090 166 1200 124"/>
+        <path class="r2" pathLength="1" d="M0 200C110 186 170 140 260 152S420 110 520 146 700 186 790 150 980 96 1080 140 1160 170 1200 160"/>
+      </svg>
+      <span class="sun" aria-hidden="true"></span>
+    </div>
+  </section>
+  <nav class="idx" id="idx" aria-label="সেকশন"></nav>
+</main>
+
+<section id="pg" hidden></section>
+
+<section id="ai" hidden>
+  <div class="ai-in">
+    <p class="mn">// for ai agents and bots</p>
+    <h2 id="at"></h2>
+    <p>এই সাইটের সম্পূর্ণ তথ্য মেশিনের জন্য কাঠামোবদ্ধ আকারে আছে। জাভাস্ক্রিপ্ট ছাড়াই পড়া যায়:</p>
+    <ul>
+      <li><a href="agent.json">agent.json</a> — structured profile (JSON)</li>
+      <li><a href="llms.txt">llms.txt</a> — plain text summary</li>
+      <li><a href="ai.html">ai.html</a> — static semantic page</li>
+    </ul>
+    <pre id="js"></pre>
+    <button class="cp" id="cp">Copy JSON</button>
+  </div>
+</section>
+
+<footer class="ft" id="ft">
+  <a href="#contact">যোগাযোগ</a>
+  <a href="ai.html">For AI</a>
+  <a href="agent.json">agent.json</a>
+  <a href="llms.txt">llms.txt</a>
+</footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="গ্যালারি"></div>
+
+<noscript>
+  <div style="max-width:700px;margin:40px auto;padding:20px">
+    <h1>সুকেশ খীসা (Sukesh Khisa)</h1>
+    <p>ইন্টার্ন সাংবাদিক ও ক্রিয়েটিভ প্রফেশনাল, রাঙামাটি</p>
+    <p>জাভাস্ক্রিপ্ট বন্ধ। মেশিন-রিডেবল সংস্করণ:</p>
+    <ul>
+      <li><a href="ai.html">ai.html</a></li>
+      <li><a href="agent.json">agent.json</a></li>
+      <li><a href="llms.txt">llms.txt</a></li>
+    </ul>
+  </div>
+</noscript>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const br=s=>esc(s).replace(/\n/g,'<br>');
+
+let D=null, L=null;
+
+const ph=(i,t)=>`<span class="ph" style="background:hsl(${150+i*22} 13% ${55+(i%3)*7}%);aspect-ratio:${['4/5','1/1','3/4'][i%3]}">${esc(t)}</span>`;
+
+function renderGallery(s){
+  return '<div class="gal">'+s.items.map((it,j)=>`
+    <figure data-j="${j}" tabindex="0" role="button" aria-label="${esc(it.title)}">
+      ${it.image?`<img loading="lazy" src="${esc(it.image)}" alt="${esc(it.title)}">`:ph(j,it.title)}
+      <figcaption>${esc(it.title)}<small>${esc(String(it.text||'').slice(0,70))}</small></figcaption>
+    </figure>`).join('')+'</div>';
+}
+
+function renderNotes(s){
+  return '<div class="nt">'+s.items.map(it=>`
+    <article>
+      <h3>${esc(it.title)}</h3>
+      ${it.image?`<img loading="lazy" src="${esc(it.image)}" alt="${esc(it.title)}">`:''}
+      <p>${br(it.text)}</p>
+      ${it.link?`<a class="l" href="${esc(it.link)}" target="_blank" rel="noopener">লিংক</a>`:''}
+      ${it.file?`<a class="l" href="${esc(it.file)}" download>ফাইল</a>`:''}
+    </article>`).join('')+'</div>';
+}
+
+function renderSection(s){
+  const n=D.sections.length, i=D.sections.indexOf(s);
+  const P=D.sections[(i+n-1)%n], X=D.sections[(i+1)%n];
+  $('#pg').innerHTML=`
+    <a class="back" href="#">← সূচি</a>
+    <p class="kind">${s.kind==='wall'?'দেয়াল':'খাতা'}</p>
+    <h2>${esc(s.name)}</h2>
+    <p class="desc">${esc(s.desc)}</p>
+    ${s.kind==='wall'?renderGallery(s):renderNotes(s)}
+    <nav class="nx">
+      <a href="#${esc(P.id)}">← ${esc(P.name)}</a>
+      <a href="#${esc(X.id)}">${esc(X.name)} →</a>
+    </nav>`;
+}
+
+function openLB(items,i){
+  L={items,i}; const it=items[i];
+  $('#lb').innerHTML=`
+    <button class="x" aria-label="বন্ধ">×</button>
+    ${items.length>1?`
+      <button class="ln p" data-n="-1" aria-label="আগের">‹</button>
+      <button class="ln n" data-n="1" aria-label="পরের">›</button>`:''}
+    <div class="box">
+      ${it.image?`<img src="${esc(it.image)}" alt="${esc(it.title)}">`:''}
+      <h3>${esc(it.title)}</h3>
+      <p>${br(it.text)}</p>
+      ${it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener">লিংক</a>`:''}
+      ${it.file?`<a href="${esc(it.file)}" download>ফাইল</a>`:''}
+    </div>`;
+  $('#lb').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
+function closeLB(){
+  $('#lb').classList.remove('on');
+  document.body.style.overflow='';
+  L=null;
+}
+
+function move(d){
+  if(!L||L.items.length<2)return;
+  openLB(L.items,(L.i+d+L.items.length)%L.items.length);
+}
+
+function route(){
+  const h=location.hash.slice(1)||'';
+  const isAI=h==='ai';
+  const s=D.sections.find(x=>x.id===h);
+  closeLB();
+  document.body.classList.toggle('ai',isAI);
+  $('#human').hidden=isAI||!!s;
+  $('#pg').hidden=!s;
+  $('#ai').hidden=!isAI;
+  $('#ft').hidden=isAI;
+  $$('.sw button').forEach(b=>{
+    const on=(b.dataset.view==='ai')===isAI;
+    b.classList.toggle('on',on);
+    b.setAttribute('aria-selected',on?'true':'false');
+  });
+  if(s) renderSection(s);
+  if(isAI) $('#js').textContent=JSON.stringify(D,null,1);
+  window.scrollTo(0,0);
+}
+
+function buildIndex(){
+  $('#idx').innerHTML=D.sections.map(s=>`
+    <a class="row" href="#${esc(s.id)}">
+      <span><b>${esc(s.name)}</b><span>${esc(s.desc)}</span></span>
+      <small>${s.kind==='wall'?'দেয়াল':'খাতা'}</small>
+    </a>`).join('');
+}
+
+async function boot(){
+  try{
+    const r=await fetch('content.json?v='+Date.now(),{cache:'no-cache'});
+    if(r.ok) D=await r.json();
+  }catch(e){}
+  if(!D){ $('#human').innerHTML='<div style="padding:40px">content.json পাওয়া যায়নি। <a href="ai.html">ai.html</a> দেখুন।</div>'; return; }
+  document.title=D.site.title+(D.site.en?' — '+D.site.en:'');
+  $('#brand').textContent=D.site.title;
+  $('#ttl').textContent=D.site.title;
+  $('#role').textContent=D.site.role||D.site.tagline||'';
+  $('#at').textContent=D.site.en?`${D.site.title} (${D.site.en})`:D.site.title;
+  buildIndex();
+
+  const ld=document.createElement('script');
+  ld.type='application/ld+json';
+  ld.textContent=JSON.stringify({
+    '@context':'https://schema.org','@type':'Person',
+    name:D.site.en||D.site.title, alternateName:D.site.title,
+    jobTitle:D.site.role,
+    address:{'@type':'PostalAddress',addressLocality:'Rangamati',addressCountry:'BD'}
+  });
+  document.head.appendChild(ld);
+
+  const bot=navigator.webdriver||/bot|crawl|spider|gpt|claude|anthropic|perplexity|gemini|headless|agent|curl|wget|python/i.test(navigator.userAgent);
+  if(!location.hash&&bot) location.hash='ai';
+  route();
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target;
+  const b=t.closest('.sw button');
+  const f=t.closest('figure');
+  if(b){ location.hash=b.dataset.view; return; }
+  if(f){ const s=D.sections.find(x=>x.id===location.hash.slice(1)); if(s) openLB(s.items,+f.dataset.j); return; }
+  if(t.id==='cp'){
+    navigator.clipboard?.writeText($('#js').textContent);
+    t.textContent='Copied';
+    setTimeout(()=>t.textContent='Copy JSON',1600);
+    return;
+  }
+  if(t.closest('#lb .ln')){ move(+t.closest('.ln').dataset.n); return; }
+  if(t.closest('#lb')&&!t.closest('.box')) closeLB();
+  if(t.classList.contains('x')) closeLB();
+});
+
+addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeLB();
+  if(L&&$('#lb').classList.contains('on')){
+    if(e.key==='ArrowRight'){ e.preventDefault(); move(1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); move(-1); }
+  }
+  if(e.key==='Enter'&&e.target.tagName==='FIGURE') e.target.click();
+});
+
+let sx=0, sy=0;
+$('#lb').addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+$('#lb').addEventListener('touchend',e=>{
+  const dx=sx-e.changedTouches[0].clientX, dy=sy-e.changedTouches[0].clientY;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) move(dx>0?1:-1);
+},{passive:true});
+
+addEventListener('hashchange',route);
+boot();
+</script>
+</body>
+</html>
