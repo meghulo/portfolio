@@ -332,9 +332,8 @@ async function boot() {
   $('#hero-tagline').textContent = D.site.tagline || '';
   $('#year').textContent = new Date().getFullYear();
 
-  // নেভিগেশন লিংক তৈরি (শুধু একবার "যোগাযোগ" যোগ হবে)
   const navLinks = D.sections.map(s => {
-    if (s.id === 'contact') return ''; // content.json-এ থাকা "যোগাযোগ" সেকশন বাদ
+    if (s.id === 'contact') return ''; 
     return `<a href="#${esc(s.id)}">${esc(s.name)}</a>`;
   }).join('');
   $('#nav-links').innerHTML = navLinks + '<a href="#contact">যোগাযোগ</a>';
