@@ -2,66 +2,58 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Admin Login</title>
+<title>Admin Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f6f2;--card:#ffffff;--ink:#1a1d20;--muted:#6b7378;--green:#2f5d50;--line:#e5e3da}
-*{box-sizing:border-box}body{margin:0;font:16px/1.5 'Hind Siliguri',system-ui,sans-serif;background:var(--bg);color:var(--ink);display:none}
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--accent:#0d9488;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 'Hind Siliguri',sans-serif;background:var(--bg);color:var(--ink);display:none}
 body.ready{display:block}
-button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:10px 18px;background:var(--green);color:#fff;font-weight:500;transition:opacity .2s}
-button:hover{opacity:.9}button.p{background:#d97706}button.g{background:#fff;color:var(--ink);border:1px solid var(--line);padding:8px 14px}
+button{font:inherit;cursor:pointer;border:none;border-radius:8px;padding:10px 18px;background:var(--accent);color:#fff;font-weight:500;transition:all .2s}
+button:hover{opacity:.9}button.p{background:#ea580c}button.g{background:#fff;color:var(--ink);border:1px solid var(--line);padding:8px 14px}
 button:disabled{opacity:.5;cursor:not-allowed}
-:focus-visible{outline:3px solid var(--green);outline-offset:2px}
-
-/* Login Screen */
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
 .login-box{background:var(--card);padding:40px;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.08);max-width:400px;width:100%;text-align:center;border:1px solid var(--line)}
-.login-box h2{font:600 28px var(--serif, 'Noto Serif Bengali', serif);margin:0 0 10px;color:var(--ink)}
-.login-box p{color:var(--muted);margin-bottom:24px;font-size:15px}
-.login-box input{width:100%;padding:14px;border:2px solid var(--line);border-radius:8px;font:inherit;margin-bottom:16px;text-align:center;font-size:18px;letter-spacing:2px}
-.login-box input:focus{border-color:var(--green);outline:none}
-.login-box button{width:100%;padding:14px;font-size:16px}
-
-/* Admin UI */
-.bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);
-     padding:16px clamp(16px,4vw,40px);display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.02)}
+.login-box h2{font-size:24px;margin:0 0 10px;font-weight:600}
+.login-box p{color:var(--muted);margin-bottom:24px;font-size:14px}
+.login-box input{width:100%;padding:12px;border:2px solid var(--line);border-radius:8px;font:inherit;margin-bottom:16px;text-align:center;font-size:16px}
+.login-box input:focus{border-color:var(--accent);outline:none}
+.login-box button{width:100%;padding:12px;font-size:16px}
+.bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.02)}
 .bar b{font-size:18px;margin-right:auto;font-weight:600}
-.chip{font-size:13px;padding:4px 12px;border-radius:99px;background:#e4efe9;color:var(--green);font-weight:500}
-.chip.d{background:#fbeccf;color:#d97706}
-#set{display:none;background:#fff;border-bottom:1px solid var(--line);padding:20px clamp(16px,4vw,40px)}
+.chip{font-size:13px;padding:4px 12px;border-radius:99px;background:#ccfbf1;color:#0f766e;font-weight:500}
+.chip.d{background:#ffedd5;color:#ea580c}
+#set{display:none;background:#fff;border-bottom:1px solid var(--line);padding:20px 24px}
 #set.on{display:block}
 #set .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
 #set p{font-size:13px;color:var(--muted);margin:12px 0 0}
-main{display:grid;grid-template-columns:300px 1fr;gap:24px;padding:24px clamp(16px,4vw,40px);max-width:1200px;margin:0 auto}
+main{display:grid;grid-template-columns:280px 1fr;gap:24px;padding:24px;max-width:1200px;margin:0 auto}
 @media(max-width:800px){main{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.02)}
 label{display:block;font-size:13px;color:var(--muted);margin-top:14px;font-weight:500}
-input,textarea{width:100%;padding:10px 12px;margin-top:6px;border:1px solid #d3cfc3;border-radius:8px;font:inherit;background:#faf9f6;transition:border .2s}
-input:focus,textarea:focus{border-color:var(--green);outline:none;background:#fff}
+input,textarea{width:100%;padding:10px 12px;margin-top:6px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#f8fafc;transition:border .2s}
+input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#fff}
 .s{display:flex;gap:6px;margin-bottom:8px}
-.s .n{flex:1;text-align:left;background:#faf9f6;color:var(--ink);border:1px solid var(--line);padding:10px 14px}
-.s .n.on{border-color:var(--green);background:#f0f6f4;font-weight:600;color:var(--green)}
+.s .n{flex:1;text-align:left;background:#f8fafc;color:var(--ink);border:1px solid var(--line);padding:10px 14px}
+.s .n.on{border-color:var(--accent);background:#f0fdfa;font-weight:600;color:var(--accent)}
 .kind{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
-.kind button{background:#faf9f6;color:var(--ink);border:2px solid var(--line);text-align:left;padding:14px}
-.kind button.on{border-color:var(--green);background:#f0f6f4}
+.kind button{background:#f8fafc;color:var(--ink);border:2px solid var(--line);text-align:left;padding:14px}
+.kind button.on{border-color:var(--accent);background:#f0fdfa}
 .kind small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
 .it{display:grid;grid-template-columns:140px 1fr;gap:20px}
 @media(max-width:600px){.it{grid-template-columns:1fr}}
-.th{aspect-ratio:4/5;border-radius:8px;background:#ebe7dc center/cover;
-    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;border:1px solid var(--line)}
+.th{aspect-ratio:4/5;border-radius:8px;background:#e2e8f0 center/cover;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;border:1px solid var(--line)}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 .up{display:inline-block;margin-top:10px}.up input{display:none}
-.up span{display:inline-block;padding:8px 16px;border:2px dashed var(--green);border-radius:8px;cursor:pointer;font-size:14px;color:var(--green);font-weight:500;transition:background .2s}
-.up span:hover{background:#f0f6f4}
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
-       padding:12px 24px;border-radius:99px;display:none;z-index:100;max-width:92vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2);font-weight:500}
+.up span{display:inline-block;padding:8px 16px;border:2px dashed var(--accent);border-radius:8px;cursor:pointer;font-size:14px;color:var(--accent);font-weight:500;transition:background .2s}
+.up span:hover{background:#f0fdfa}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:99px;display:none;z-index:100;max-width:92vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
 
-<!-- পাসওয়ার্ড লক স্ক্রিন -->
 <div id="login-screen">
   <div class="login-box">
     <h2>Admin Access</h2>
@@ -71,15 +63,13 @@ input:focus,textarea:focus{border-color:var(--green);outline:none;background:#ff
   </div>
 </div>
 
-<!-- মূল এডমিন প্যানেল -->
 <div id="admin-app" style="display:none">
   <div class="bar">
     <b>অ্যাডমিন প্যানেল</b>
-    <span class="chip" id="ch">সব সেভ করা আছে</span>
+    <span class="chip" id="ch">লোড হচ্ছে...</span>
     <button class="g" onclick="document.getElementById('set').classList.toggle('on')">⚙️ সেটিংস</button>
     <a href="index.html" target="_blank" class="g" style="text-decoration:none;color:var(--ink)">🌐 সাইট দেখুন</a>
-    <button class="g" onclick="dl()">⬇️ ব্যাকআপ</button>
-    <button class="p" id="pub" onclick="save()">🚀 প্রকাশ করুন</button>
+    <button class="p" id="pub" onclick="save()" disabled>🚀 প্রকাশ করুন</button>
     <button class="g" onclick="logout()" style="color:#dc2626;border-color:#fca5a5">লগআউট</button>
   </div>
 
@@ -114,10 +104,7 @@ input:focus,textarea:focus{border-color:var(--green);outline:none;background:#ff
 <div id="toast"></div>
 
 <script>
-// 🔒 পাসওয়ার্ড সেটআপ
-// ডিফল্ট পাসওয়ার্ড: sukesh2026 (এটি পরিবর্তন করতে নিচের লাইনে নতুন পাসওয়ার্ডের Base64 কোড দিন)
-// Base64 জেনারেট করতে: console-এ btoa('আপনার_নতুন_পাসওয়ার্ড') লিখুন
-const SECRET_HASH = "c3VrZXNoMjAyNg=="; 
+const SECRET_HASH = "c3VrZXNoMjAyNg=="; // পাসওয়ার্ড: sukesh2026
 
 function login(){
   const val = document.getElementById('pass').value;
@@ -126,83 +113,62 @@ function login(){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('admin-app').style.display='block';
     document.body.classList.add('ready');
+    initApp();
   } else {
-    alert('ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।');
+    alert('ভুল পাসওয়ার্ড!');
     document.getElementById('pass').value='';
   }
 }
-
 function logout(){
   sessionStorage.removeItem('admin_auth');
   location.reload();
 }
 
-// পেজ লোড হলে চেক করুন আগে লগইন করা আছে কিনা
-if(sessionStorage.getItem('admin_auth') === 'true'){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('admin-app').style.display='block';
-  document.body.classList.add('ready');
-} else {
-  document.body.classList.add('ready');
-}
-
-// ================= বাকি সব কোড আগের মতোই =================
-let C={site:{title:'',role:'',tagline:'',en:''},sections:[]};
-let cur=0, pend={}, prev={}, dirty=0;
-
-const $=s=>document.getElementById(s);
-const set=$('set');
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-const cfg=JSON.parse(localStorage.adm||'{}');
-if($('repo')) $('repo').value=cfg.repo||'';
-if($('br')) $('br').value=cfg.br||'main';
-if($('tk')) $('tk').value=cfg.tk||'';
-if(!cfg.tk && set) set.classList.add('on');
+let C = null;
+let cur = 0, pend = {}, prev = {}, dirty = 0;
+const $ = s => document.getElementById(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function toast(t){
-  const e=$('toast'); if(!e) return;
-  e.textContent=t; e.style.display='block';
-  clearTimeout(toast.t); toast.t=setTimeout(()=>e.style.display='none',4000);
+  const e = $('toast'); e.textContent = t; e.style.display = 'block';
+  clearTimeout(toast.t); toast.t = setTimeout(() => e.style.display = 'none', 4000);
 }
-function mk(){
-  dirty=1;
-  if($('ch')){
-    $('ch').textContent='অসেভ পরিবর্তন আছে';
-    $('ch').className='chip d';
-  }
-}
-addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
 
-const mv=(a,i,d)=>{ const j=i+d; if(j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; mk(); };
-const S=()=>C.sections[cur];
-const E=(j,k,v)=>{ S().items[j][k]=v; mk(); };
+function mk(){
+  dirty = 1;
+  $('ch').textContent = 'অসেভ পরিবর্তন আছে';
+  $('ch').className = 'chip d';
+}
+
+const mv = (a, i, d) => { const j = i + d; if(j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; mk(); };
+const S = () => C.sections[cur];
+const E = (j, k, v) => { S().items[j][k] = v; mk(); };
 
 function draw(){
-  if(!$('ti')) return;
-  $('ti').value=C.site.title||'';
-  $('ro').value=C.site.role||'';
-  $('tg').value=C.site.tagline||'';
-  $('en').value=C.site.en||'';
+  if(!C) return;
+  $('ti').value = C.site.title || '';
+  $('ro').value = C.site.role || '';
+  $('tg').value = C.site.tagline || '';
+  $('en').value = C.site.en || '';
   
-  $('secs').innerHTML=C.sections.map((s,i)=>`
+  $('secs').innerHTML = C.sections.map((s, i) => `
     <div class="s">
       <button class="n ${i===cur?'on':''}" id="sl${i}" onclick="cur=${i};draw()">${esc(s.name)||'(নামহীন)'}</button>
       <button class="g" style="padding:8px 12px" onclick="mv(C.sections,${i},-1);cur=Math.max(0,i-1);draw()">↑</button>
       <button class="g" style="padding:8px 12px" onclick="mv(C.sections,${i},1);cur=Math.min(C.sections.length-1,i+1);draw()">↓</button>
     </div>`).join('');
 
-  const s=S();
+  const s = S();
   if(!s){
-    $('ed').innerHTML='<div class="card">বাঁ দিক থেকে একটি সেকশন বেছে নিন অথবা নতুন সেকশন তৈরি করুন।</div>';
+    $('ed').innerHTML = '<div class="card">বাঁ দিক থেকে একটি সেকশন বেছে নিন অথবা নতুন সেকশন তৈরি করুন।</div>';
     return;
   }
   
-  $('ed').innerHTML=`
+  $('ed').innerHTML = `
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <b>সেকশনের তথ্য</b>
-        <button class="g" style="color:#dc2626;border-color:#fca5a5" onclick="if(confirm('এই সেকশনটি মুছে ফেলবেন?')){C.sections.splice(cur,1);cur=0;mk();draw()}">সেকশন মুছুন</button>
+        <button class="g" style="color:#dc2626;border-color:#fca5a5" onclick="if(confirm('এই সেকশনটি মুছে ফেলবেন?')){C.sections.splice(cur,1);cur=0;mk();draw()}">মুছুন</button>
       </div>
       <label>সেকশনের নাম</label>
       <input value="${esc(s.name)}" oninput="S().name=this.value;document.getElementById('sl${cur}').textContent=this.value||'(নামহীন)';mk()">
@@ -210,16 +176,15 @@ function draw(){
       <input value="${esc(s.desc)}" oninput="S().desc=this.value;mk()">
       <label>লেআউট ধরণ</label>
       <div class="kind">
-        <button class="${s.kind==='wall'?'on':''}" onclick="S().kind='wall';mk();draw()">🖼️ দেয়াল (Gallery)<small>ছবি ও ডিজাইনের গ্রিড</small></button>
-        <button class="${s.kind==='notebook'?'on':''}" onclick="S().kind='notebook';mk();draw()">📝 খাতা (Notes)<small>লেখা, কবিতা, স্কিল</small></button>
+        <button class="${s.kind==='wall'?'on':''}" onclick="S().kind='wall';mk();draw()">🖼️ দেয়াল (Gallery)<small>ছবি ও গ্রিড</small></button>
+        <button class="${s.kind==='notebook'?'on':''}" onclick="S().kind='notebook';mk();draw()">📝 খাতা (Notes)<small>লেখা ও তালিকা</small></button>
       </div>
     </div>`+
     s.items.map((it,j)=>`
       <div class="card it">
         <div>
           <div class="th" style="${it.image?`background-image:url('${esc(prev[it.image]||it.image)}')`:''}">${it.image?'':'ছবি নেই'}</div>
-          <label class="up"><input type="file" accept="image/*,.pdf" onchange="up(${j},this)"><span>+ আপলোড</span></label>
-          ${it.file?`<div style="font-size:13px;margin-top:8px;color:var(--muted)">📎 ${esc(it.file)}</div>`:''}
+          <label class="up"><input type="file" accept="image/*" onchange="up(${j},this)"><span>+ আপলোড</span></label>
         </div>
         <div>
           <label>শিরোনাম</label>
@@ -233,7 +198,6 @@ function draw(){
             <button class="g" onclick="mv(S().items,${j},-1);draw()">↑ উপরে</button>
             <button class="g" onclick="mv(S().items,${j},1);draw()">↓ নিচে</button>
             ${it.image?`<button class="g" onclick="E(${j},'image','');draw()">ছবি সরান</button>`:''}
-            ${it.file?`<button class="g" onclick="E(${j},'file','');draw()">ফাইল সরান</button>`:''}
             <button class="g" style="color:#dc2626" onclick="if(confirm('আইটেমটি মুছবেন?')){S().items.splice(${j},1);mk();draw()}">মুছুন</button>
           </div>
         </div>
@@ -241,149 +205,144 @@ function draw(){
       `<button onclick="S().items.push({title:'নতুন শিরোনাম',text:'',link:'',image:'',file:''});mk();draw()" style="width:100%">+ নতুন আইটেম যোগ করুন</button>`;
 }
 
-const addS=()=>{
+const addS = () => {
   C.sections.push({id:'s'+Date.now().toString(36),name:'নতুন সেকশন',desc:'',kind:'wall',items:[]});
-  cur=C.sections.length-1; mk(); draw();
+  cur = C.sections.length-1; mk(); draw();
 };
 
-function up(j,inp){
-  const f=inp.files[0]; if(!f) return;
-  const it=S().items[j];
+function up(j, inp){
+  const f = inp.files[0]; if(!f) return;
+  const it = S().items[j];
   if(f.type.startsWith('image/')){
-    const im=new Image;
-    im.onload=()=>{
-      const k=Math.min(1,1600/Math.max(im.width,im.height));
-      const c=document.createElement('canvas');
-      c.width=im.width*k; c.height=im.height*k;
-      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-      const u=c.toDataURL('image/jpeg',.85);
-      const p='images/'+Date.now()+'.jpg';
-      pend[p]=u.split(',')[1];
-      prev[p]=u;
-      it.image=p; mk(); draw();
+    const im = new Image;
+    im.onload = () => {
+      const k = Math.min(1, 1600/Math.max(im.width, im.height));
+      const c = document.createElement('canvas');
+      c.width = im.width*k; c.height = im.height*k;
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      const u = c.toDataURL('image/jpeg', .85);
+      const p = 'images/'+Date.now()+'.jpg';
+      pend[p] = u.split(',')[1];
+      prev[p] = u;
+      it.image = p; mk(); draw();
     };
-    im.src=URL.createObjectURL(f);
-  } else {
-    const r=new FileReader;
-    r.onload=()=>{
-      const p='files/'+Date.now()+'-'+f.name.replace(/[^\w.-]/g,'_');
-      pend[p]=r.result.split(',')[1];
-      it.file=p; mk(); draw();
-    };
-    r.readAsDataURL(f);
+    im.src = URL.createObjectURL(f);
   }
 }
 
-// Generators
+// Generators (AI)
 function genAgent(){
-  const s=C.site;
-  const n=s.en?`${s.title} (${s.en})`:s.title;
+  const s = C.site;
+  const n = s.en ? `${s.title} (${s.en})` : s.title;
   return {
     schema:'portfolio-agent/1',
-    person:{name:n,role:s.role||'',tagline:s.tagline||''},
+    person:{name:n, role:s.role||'', tagline:s.tagline||''},
     sections:C.sections.map(x=>({
-      id:x.id,name:x.name,
+      id:x.id, name:x.name,
       kind:x.kind==='wall'?'gallery':'notes',
       description:x.desc||'',
-      items:x.items.map(i=>({
-        title:i.title,text:i.text,
-        link:i.link||undefined,image:i.image||undefined,file:i.file||undefined
-      }))
+      items:x.items.map(i=>({title:i.title, text:i.text, link:i.link||undefined, image:i.image||undefined, file:i.file||undefined}))
     })),
     updated:new Date().toISOString()
   };
 }
 function genLLMS(){
-  const s=C.site;
-  const n=s.en?`${s.title} (${s.en})`:s.title;
+  const s = C.site;
+  const n = s.en ? `${s.title} (${s.en})` : s.title;
   return `# ${n}\n> ${s.role||''}\n\n`+C.sections.map(x=>
     `## ${x.name}\n${x.desc||''}\n\n`+x.items.map(i=>
       `- ${i.title}: ${String(i.text).replace(/\n/g,' ')}${i.link?` (${i.link})`:''}`
     ).join('\n')
   ).join('\n\n')+'\n';
 }
-function genAiHtml(){
-  const s=C.site;
-  const n=s.en?`${s.title} (${s.en})`:s.title;
-  return `<!doctype html><html lang="bn"><head><meta charset="utf-8">`+
-    `<title>${esc(n)} | for AI agents</title>`+
-    `<meta name="viewport" content="width=device-width,initial-scale=1">`+
-    `<link rel="alternate" type="application/json" href="agent.json">`+
-    `<link rel="alternate" type="text/markdown" href="llms.txt">`+
-    `</head><body style="font:16px/1.7 system-ui;max-width:760px;margin:30px auto;padding:0 16px">`+
-    `<h1>${esc(n)}</h1><p>${esc(s.role)}</p>`+
-    C.sections.map(x=>`<section id="${esc(x.id)}"><h2>${esc(x.name)}</h2>`+
-      `<p>${esc(x.desc)}</p><ul>`+
-      x.items.map(i=>`<li><b>${esc(i.title)}</b>: ${esc(i.text).replace(/\n/g,'<br>')}`+
-        `${i.link?` <a href="${esc(i.link)}">link</a>`:''}</li>`).join('')+
-      `</ul></section>`).join('')+
-    `<p><a href="agent.json">agent.json</a> | <a href="llms.txt">llms.txt</a> | <a href="index.html">মানব ভিউ</a></p>`+
-    `</body></html>`;
-}
 
 // GitHub API
-const b64=s=>btoa(unescape(encodeURIComponent(s)));
-async function gh(path,method='GET',body){
-  const u=`https://api.github.com/repos/${cfg.repo}/contents/${path}`+(method==='GET'?`?ref=${cfg.br}`:'');
-  const r=await fetch(u,{
+const b64 = s => btoa(unescape(encodeURIComponent(s)));
+async function gh(path, method='GET', body, cfg){
+  const u = `https://api.github.com/repos/${cfg.repo}/contents/${path}` + (method==='GET'?`?ref=${cfg.br}`:'');
+  const r = await fetch(u, {
     method,
-    headers:{Authorization:'Bearer '+cfg.tk,Accept:'application/vnd.github+json','Content-Type':'application/json'},
-    body:body?JSON.stringify({...body,branch:cfg.br}):undefined
+    headers:{Authorization:'Bearer '+cfg.tk, Accept:'application/vnd.github+json', 'Content-Type':'application/json'},
+    body: body ? JSON.stringify({...body, branch:cfg.br}) : undefined
   });
-  if(method==='GET'&&r.status===404) return null;
-  if(!r.ok){
-    const msg=r.status===401?'টোকেন ভুল বা মেয়াদোত্তীর্ণ':
-              r.status===403?'টোকেনে পারমিশন নেই (Contents: Read/Write দিন)':
-              r.status===404?'রিপো বা ব্রাঞ্চ পাওয়া যায়নি':'এরর কোড: '+r.status;
-    throw new Error(msg);
-  }
+  if(method==='GET' && r.status===404) return null;
+  if(!r.ok) throw new Error(r.status===401?'টোকেন ভুল':r.status===403?'পারমিশন নেই':'এরর: '+r.status);
   return r.json();
-}
-async function putText(path,text,message){
-  const o=await gh(path);
-  return gh(path,'PUT',{message,content:b64(text),sha:o?.sha});
-}
-async function putBinary(path,b64content,message){
-  const o=await gh(path);
-  return gh(path,'PUT',{message,content:b64content,sha:o?.sha});
 }
 
 async function save(){
-  Object.assign(cfg,{
-    repo:$('repo').value.trim(),
-    br:$('br').value.trim()||'main',
-    tk:$('tk').value.trim()
-  });
-  localStorage.adm=JSON.stringify(cfg);
-  if(!cfg.repo||!cfg.tk){ set.classList.add('on'); return toast('⚠️ রিপো এবং টোকেন দিন'); }
+  if(!C || !C.sections) return alert('ডেটা লোড হয়নি!');
+  
+  const cfg = {
+    repo: $('repo').value.trim(),
+    br: $('br').value.trim() || 'main',
+    tk: $('tk').value.trim()
+  };
+  localStorage.adm = JSON.stringify(cfg);
+  
+  if(!cfg.repo || !cfg.tk) {
+    $('set').classList.add('on');
+    return toast('⚠️ রিপো এবং টোকেন দিন');
+  }
 
-  $('pub').disabled=true;
-  try{
+  $('pub').disabled = true;
+  try {
     toast('⏳ প্রকাশ করা হচ্ছে...');
-    for(const p in pend) await putBinary(p,pend[p],'admin: add '+p);
-    await putText('content.json',JSON.stringify(C,null,1),'admin: update content.json');
-    await putText('agent.json',JSON.stringify(genAgent(),null,1),'admin: update agent.json');
-    await putText('llms.txt',genLLMS(),'admin: update llms.txt');
-    await putText('ai.html',genAiHtml(),'admin: update ai.html');
-    pend={}; dirty=0;
-    $('ch').textContent='সব সেভ করা আছে'; $('ch').className='chip';
-    toast('✅ সফলভাবে প্রকাশিত! ১-২ মিনিটে সাইটে আপডেট হবে।');
-  }catch(e){ toast('❌ ব্যর্থ: '+e.message); }
-  $('pub').disabled=false;
+    for(const p in pend) {
+      const o = await gh(p, 'GET', null, cfg);
+      await gh(p, 'PUT', {message:'admin: add '+p, content:pend[p], sha:o?.sha}, cfg);
+    }
+    
+    const files = [
+      ['content.json', JSON.stringify(C, null, 1)],
+      ['agent.json', JSON.stringify(genAgent(), null, 1)],
+      ['llms.txt', genLLMS()]
+    ];
+    
+    for(const [path, content] of files) {
+      const o = await gh(path, 'GET', null, cfg);
+      await gh(path, 'PUT', {message:'admin: update '+path, content:b64(content), sha:o?.sha}, cfg);
+    }
+    
+    pend = {}; dirty = 0;
+    $('ch').textContent = 'সব সেভ করা আছে'; $('ch').className = 'chip';
+    toast('✅ সফলভাবে প্রকাশিত! ১-২ মিনিটে আপডেট হবে।');
+  } catch(e) {
+    toast('❌ ব্যর্থ: ' + e.message);
+  }
+  $('pub').disabled = false;
 }
 
-function dl(){
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(C,null,1)],{type:'application/json'}));
-  a.download='content.json'; a.click();
+async function initApp(){
+  const cfg = JSON.parse(localStorage.adm || '{}');
+  $('repo').value = cfg.repo || '';
+  $('br').value = cfg.br || 'main';
+  $('tk').value = cfg.tk || '';
+  if(!cfg.tk) $('set').classList.add('on');
+  
+  try {
+    const r = await fetch('content.json?v=' + Date.now());
+    C = await r.json();
+    if(!C || !C.sections) throw new Error("Empty JSON");
+    
+    $('ch').textContent = 'সব সেভ করা আছে'; 
+    $('ch').className = 'chip';
+    $('pub').disabled = false;
+    draw();
+  } catch(e) {
+    $('ch').textContent = 'লোড ব্যর্থ!';
+    $('ch').className = 'chip d';
+    $('ed').innerHTML = '<div class="card" style="color:red"><b>ত্রুটি:</b> content.json লোড করা যাচ্ছে না। ফাইলটি চেক করুন।</div>';
+  }
 }
 
 if(sessionStorage.getItem('admin_auth') === 'true'){
-  fetch('content.json?v='+Date.now())
-    .then(r=>r.json())
-    .then(j=>C=j)
-    .catch(()=>toast('content.json লোড হয়নি'))
-    .finally(draw);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-app').style.display='block';
+  document.body.classList.add('ready');
+  initApp();
+} else {
+  document.body.classList.add('ready');
 }
 </script>
 </body>
