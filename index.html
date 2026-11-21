@@ -330,5 +330,11 @@ async function boot() {
 }
 boot();
 </script>
+  <!-- Netlify Form Detection (hidden static form) -->
+<form name="contact" data-netlify="true" hidden>
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <textarea name="message"></textarea>
+</form>
 </body>
 </html>
