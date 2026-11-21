@@ -21,16 +21,24 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .login-box input{width:100%;padding:12px;border:2px solid var(--line);border-radius:8px;font:inherit;margin-bottom:16px;text-align:center;font-size:16px}
 .login-box input:focus{border-color:var(--accent);outline:none}
 .login-box button{width:100%;padding:12px;font-size:16px}
+
 .bar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.02)}
 .bar b{font-size:18px;margin-right:auto;font-weight:600}
 .chip{font-size:13px;padding:4px 12px;border-radius:99px;background:#ccfbf1;color:#0f766e;font-weight:500}
 .chip.d{background:#ffedd5;color:#ea580c}
+.tabs{display:flex;gap:8px;margin-left:16px}
+.tabs button{background:transparent;color:var(--muted);padding:8px 16px}
+.tabs button.on{background:var(--accent);color:#fff}
+
 #set{display:none;background:#fff;border-bottom:1px solid var(--line);padding:20px 24px}
 #set.on{display:block}
 #set .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
 #set p{font-size:13px;color:var(--muted);margin:12px 0 0}
+
 main{display:grid;grid-template-columns:280px 1fr;gap:24px;padding:24px;max-width:1200px;margin:0 auto}
 @media(max-width:800px){main{grid-template-columns:1fr}}
+
+/* Content UI */
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.02)}
 label{display:block;font-size:13px;color:var(--muted);margin-top:14px;font-weight:500}
 input,textarea{width:100%;padding:10px 12px;margin-top:6px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#f8fafc;transition:border .2s}
@@ -49,6 +57,26 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
 .up{display:inline-block;margin-top:10px}.up input{display:none}
 .up span{display:inline-block;padding:8px 16px;border:2px dashed var(--accent);border-radius:8px;cursor:pointer;font-size:14px;color:var(--accent);font-weight:500;transition:background .2s}
 .up span:hover{background:#f0fdfa}
+
+/* Messages UI */
+.msg-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:600px;overflow:hidden}
+@media(max-width:900px){.msg-layout{grid-template-columns:1fr}}
+.msg-list{border-right:1px solid var(--line);overflow-y:auto;max-height:70vh}
+.msg-item{padding:16px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .2s}
+.msg-item:hover{background:#f8fafc}
+.msg-item.on{background:#f0fdfa;border-left:4px solid var(--accent)}
+.msg-item h4{margin:0 0 4px;font-size:16px;font-weight:600}
+.msg-item p{margin:0;font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-item small{font-size:12px;color:#94a3b8;display:block;margin-top:6px}
+.msg-view{padding:32px;overflow-y:auto;max-height:70vh}
+.msg-view h3{font-size:24px;margin:0 0 8px}
+.msg-view .meta{font-size:14px;color:var(--muted);margin-bottom:24px;display:flex;gap:16px;flex-wrap:wrap}
+.msg-view .body{font-size:16px;line-height:1.8;white-space:pre-wrap;background:#f8fafc;padding:20px;border-radius:8px;border:1px solid var(--line);margin-bottom:24px}
+.reply-box{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px}
+.reply-box textarea{width:100%;min-height:120px;margin-bottom:12px;resize:vertical}
+.empty-state{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:12px}
+.empty-state span{font-size:48px}
+
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:99px;display:none;z-index:100;max-width:92vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 </style>
 </head>
@@ -65,24 +93,30 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
 
 <div id="admin-app" style="display:none">
   <div class="bar">
-    <b>অ্যাডমিন প্যানেল</b>
-    <span class="chip" id="ch">লোড হচ্ছে...</span>
+    <b>Admin</b>
+    <div class="tabs">
+      <button id="tab-content" class="on" onclick="switchView('content')">কনটেন্ট</button>
+      <button id="tab-messages" onclick="switchView('messages')">মেসেজ</button>
+    </div>
+    <span class="chip" id="ch" style="margin-left:auto">লোড হচ্ছে...</span>
     <button class="g" onclick="document.getElementById('set').classList.toggle('on')">⚙️ সেটিংস</button>
-    <a href="index.html" target="_blank" class="g" style="text-decoration:none;color:var(--ink)">🌐 সাইট দেখুন</a>
-    <button class="p" id="pub" onclick="save()" disabled>🚀 প্রকাশ করুন</button>
+    <a href="index.html" target="_blank" class="g" style="text-decoration:none;color:var(--ink)">🌐 সাইট</a>
+    <button class="p" id="pub" onclick="save()" disabled>🚀 প্রকাশ</button>
     <button class="g" onclick="logout()" style="color:#dc2626;border-color:#fca5a5">লগআউট</button>
   </div>
 
   <div id="set">
     <div class="row">
-      <div><label>GitHub Repo (username/repo)</label><input id="repo" placeholder="meghulo/portfolio"></div>
+      <div><label>GitHub Repo</label><input id="repo" placeholder="username/repo"></div>
       <div><label>Branch</label><input id="br" value="main"></div>
-      <div><label>GitHub Token (Fine-grained)</label><input id="tk" type="password" placeholder="github_pat_..."></div>
+      <div><label>GitHub Token</label><input id="tk" type="password" placeholder="github_pat_..."></div>
+      <div><label>Netlify Site ID (মেসেজের জন্য)</label><input id="netlify-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
+      <div><label>Netlify Token (মেসেজের জন্য)</label><input id="netlify-tk" type="password" placeholder="Netlify Personal Access Token"></div>
     </div>
-    <p>⚠️ টোকেন তৈরি করতে GitHub Settings > Developer Settings > Fine-grained tokens এ যান। শুধু এই রিপোর <b>Contents: Read and Write</b> পারমিশন দিন।</p>
+    <p>💡 Netlify Token তৈরি করতে: Netlify Dashboard > User Settings > Applications > Personal access tokens। Site ID পাবেন: Site Settings > General > Site ID।</p>
   </div>
 
-  <main>
+  <main id="view-content">
     <aside>
       <div class="card">
         <b>সাইট সেটিংস</b>
@@ -99,6 +133,17 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
     </aside>
     <section id="ed"></section>
   </main>
+
+  <main id="view-messages" style="display:none">
+    <div class="msg-layout" style="grid-column: 1 / -1;">
+      <div class="msg-list" id="msg-list">
+        <div class="empty-state"><span>📭</span> কোনো মেসেজ নেই</div>
+      </div>
+      <div class="msg-view" id="msg-view">
+        <div class="empty-state"><span>✉️</span> দেখার জন্য বাম দিক থেকে একটি মেসেজ সিলেক্ট করুন</div>
+      </div>
+    </div>
+  </main>
 </div>
 
 <div id="toast"></div>
@@ -107,8 +152,7 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
 const SECRET_HASH = "c3VrZXNoMjAyNg=="; // পাসওয়ার্ড: sukesh2026
 
 function login(){
-  const val = document.getElementById('pass').value;
-  if(btoa(val) === SECRET_HASH){
+  if(btoa(document.getElementById('pass').value) === SECRET_HASH){
     sessionStorage.setItem('admin_auth', 'true');
     document.getElementById('login-screen').style.display='none';
     document.getElementById('admin-app').style.display='block';
@@ -126,6 +170,7 @@ function logout(){
 
 let C = null;
 let cur = 0, pend = {}, prev = {}, dirty = 0;
+let currentMsgs = [];
 const $ = s => document.getElementById(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -134,12 +179,20 @@ function toast(t){
   clearTimeout(toast.t); toast.t = setTimeout(() => e.style.display = 'none', 4000);
 }
 
+function switchView(view){
+  $('view-content').style.display = view === 'content' ? 'grid' : 'none';
+  $('view-messages').style.display = view === 'messages' ? 'block' : 'none';
+  $('tab-content').classList.toggle('on', view === 'content');
+  $('tab-messages').classList.toggle('on', view === 'messages');
+  if(view === 'messages' && currentMsgs.length === 0) fetchMessages();
+}
+
+// ================= CONTENT LOGIC =================
 function mk(){
   dirty = 1;
   $('ch').textContent = 'অসেভ পরিবর্তন আছে';
   $('ch').className = 'chip d';
 }
-
 const mv = (a, i, d) => { const j = i + d; if(j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; mk(); };
 const S = () => C.sections[cur];
 const E = (j, k, v) => { S().items[j][k] = v; mk(); };
@@ -198,7 +251,7 @@ function draw(){
             <button class="g" onclick="mv(S().items,${j},-1);draw()">↑ উপরে</button>
             <button class="g" onclick="mv(S().items,${j},1);draw()">↓ নিচে</button>
             ${it.image?`<button class="g" onclick="E(${j},'image','');draw()">ছবি সরান</button>`:''}
-            <button class="g" style="color:#dc2626" onclick="if(confirm('আইটেমটি মুছবেন?')){S().items.splice(${j},1);mk();draw()}">মুছুন</button>
+            <button class="g" style="color:#dc2626" onclick="if(confirm('আইটেমটি মুছবেন?')){S().items.splice(${j},1);mk();draw()}">মুছবেন</button>
           </div>
         </div>
       </div>`).join('')+
@@ -230,7 +283,92 @@ function up(j, inp){
   }
 }
 
-// Generators (AI)
+// ================= MESSAGES LOGIC =================
+async function fetchMessages(){
+  const siteId = $('netlify-id').value.trim();
+  const token = $('netlify-tk').value.trim();
+  
+  if(!siteId || !token) {
+    $('msg-list').innerHTML = '<div class="empty-state"><span>⚙️</span> সেটিংস থেকে Netlify Site ID এবং Token দিন</div>';
+    return;
+  }
+
+  try {
+    $('msg-list').innerHTML = '<div style="padding:20px;text-align:center">লোড হচ্ছে...</div>';
+    
+    // 1. Get Forms
+    const formsRes = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if(!formsRes.ok) throw new Error("Forms fetch failed");
+    const forms = await formsRes.json();
+    const contactForm = forms.find(f => f.name === 'contact');
+    
+    if(!contactForm) throw new Error("Contact form not found. Please submit a test message first.");
+    
+    // 2. Get Submissions
+    const subsRes = await fetch(`https://api.netlify.com/api/v1/forms/${contactForm.id}/submissions`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if(!subsRes.ok) throw new Error("Submissions fetch failed");
+    
+    currentMsgs = await subsRes.json();
+    
+    if(currentMsgs.length === 0) {
+      $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি</div>';
+      return;
+    }
+
+    // Sort by date descending
+    currentMsgs.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    $('msg-list').innerHTML = currentMsgs.map((m, i) => `
+      <div class="msg-item" onclick="openMessage(${i})">
+        <h4>${esc(m.data.name)}</h4>
+        <p>${esc(m.data.message)}</p>
+        <small>${new Date(m.created_at).toLocaleString('bn-BD')}</small>
+      </div>
+    `).join('');
+
+  } catch(e) {
+    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}</div>`;
+  }
+}
+
+function openMessage(index){
+  document.querySelectorAll('.msg-item').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.msg-item')[index].classList.add('on');
+  
+  const m = currentMsgs[index];
+  const subject = encodeURIComponent(`Re: Contact from ${m.data.name}`);
+  const body = encodeURIComponent(`\n\n--- Original Message ---\nFrom: ${m.data.name} (${m.data.email})\n\n${m.data.message}`);
+  
+  $('msg-view').innerHTML = `
+    <h3>${esc(m.data.name)}</h3>
+    <div class="meta">
+      <span>📧 ${esc(m.data.email)}</span>
+      <span>🕒 ${new Date(m.created_at).toLocaleString('bn-BD')}</span>
+    </div>
+    <div class="body">${esc(m.data.message)}</div>
+    
+    <div class="reply-box">
+      <h4 style="margin:0 0 12px">রিপ্লাই দিন</h4>
+      <textarea id="reply-text" placeholder="আপনার রিপ্লাই এখানে লিখুন..."></textarea>
+      <button class="p" onclick="sendReply('${esc(m.data.email)}', '${subject}')">📩 ইমেইলে রিপ্লাই পাঠান</button>
+    </div>
+  `;
+}
+
+function sendReply(email, subject){
+  const replyText = $('reply-text').value;
+  if(!replyText) return toast('রিপ্লাই লিখুন');
+  
+  const body = encodeURIComponent(replyText);
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  toast('ইমেইল অ্যাপ খোলা হচ্ছে...');
+}
+
+// ================= CORE / GITHUB =================
 function genAgent(){
   const s = C.site;
   const n = s.en ? `${s.title} (${s.en})` : s.title;
@@ -256,7 +394,6 @@ function genLLMS(){
   ).join('\n\n')+'\n';
 }
 
-// GitHub API
 const b64 = s => btoa(unescape(encodeURIComponent(s)));
 async function gh(path, method='GET', body, cfg){
   const u = `https://api.github.com/repos/${cfg.repo}/contents/${path}` + (method==='GET'?`?ref=${cfg.br}`:'');
@@ -276,13 +413,15 @@ async function save(){
   const cfg = {
     repo: $('repo').value.trim(),
     br: $('br').value.trim() || 'main',
-    tk: $('tk').value.trim()
+    tk: $('tk').value.trim(),
+    netlifyId: $('netlify-id').value.trim(),
+    netlifyTk: $('netlify-tk').value.trim()
   };
   localStorage.adm = JSON.stringify(cfg);
   
   if(!cfg.repo || !cfg.tk) {
     $('set').classList.add('on');
-    return toast('⚠️ রিপো এবং টোকেন দিন');
+    return toast('⚠️ GitHub রিপো এবং টোকেন দিন');
   }
 
   $('pub').disabled = true;
@@ -318,6 +457,9 @@ async function initApp(){
   $('repo').value = cfg.repo || '';
   $('br').value = cfg.br || 'main';
   $('tk').value = cfg.tk || '';
+  $('netlify-id').value = cfg.netlifyId || '';
+  $('netlify-tk').value = cfg.netlifyTk || '';
+  
   if(!cfg.tk) $('set').classList.add('on');
   
   try {
