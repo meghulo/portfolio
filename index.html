@@ -9,126 +9,114 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="alternate" type="application/json" href="agent.json">
 <link rel="alternate" type="text/markdown" href="llms.txt">
-<!-- নতুন ফন্ট: Outfit (ইংরেজি) এবং Hind Siliguri (বাংলা) -->
+<!-- নতুন ফন্ট: Noto Serif Bengali (হেডিংয়ের জন্য) এবং Inter (বডি টেক্সটের জন্য) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+Bengali:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #fafafa;
+  --bg: #faf9f7;
   --surface: #ffffff;
-  --text: #09090b;
-  --text-muted: #71717a;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --border: #e4e4e7;
-  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 20px 40px -10px rgba(99, 102, 241, 0.15);
-  --radius: 20px;
-  --font-en: 'Outfit', sans-serif;
-  --font-bn: 'Hind Siliguri', sans-serif;
+  --text: #111111;
+  --text-muted: #666666;
+  --accent: #2d5a4c; /* মার্জিত সবুজ */
+  --border: #e5e5e5;
+  --radius: 12px;
+  --font-serif: 'Noto Serif Bengali', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   --pad: clamp(20px, 5vw, 60px);
 }
 
 [data-theme="dark"] {
-  --bg: #09090b;
-  --surface: #18181b;
-  --text: #f4f4f5;
-  --text-muted: #a1a1aa;
-  --accent: #818cf8;
-  --accent-hover: #a5b4fc;
-  --border: #27272a;
-  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --shadow-hover: 0 20px 40px -10px rgba(129, 140, 248, 0.2);
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --text: #f5f5f5;
+  --text-muted: #999999;
+  --accent: #7fb8a4;
+  --border: #2a2a2a;
 }
 
 * { box-sizing: border-box; margin: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body { background: var(--bg); color: var(--text); font: 17px/1.7 var(--font-bn); min-height: 100dvh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
-h1, h2, h3, .brand { font-family: var(--font-en), var(--font-bn); }
+body { background: var(--bg); color: var(--text); font: 17px/1.7 var(--font-sans); min-height: 100dvh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+h1, h2, h3 { font-family: var(--font-serif); font-weight: 500; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 /* Navbar */
-.navbar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 1100px; z-index: 50; background: rgba(var(--surface), 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 99px; transition: all 0.3s; }
-[data-theme="dark"] .navbar { background: rgba(24, 24, 27, 0.7); }
-.nav-container { padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
-.brand { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
-.nav-links { display: flex; gap: 24px; align-items: center; font-size: 14px; font-weight: 500; }
+.navbar { position: fixed; top: 0; width: 100%; z-index: 50; background: rgba(var(--bg), 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); transition: background 0.3s, border-color 0.3s; }
+.nav-container { max-width: 1100px; margin: 0 auto; padding: 20px var(--pad); display: flex; justify-content: space-between; align-items: center; }
+.brand { font-family: var(--font-serif); font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+.nav-links { display: flex; gap: 24px; align-items: center; font-size: 15px; font-weight: 500; }
 .nav-links a { color: var(--text-muted); transition: color 0.2s; }
 .nav-links a:hover { color: var(--text); }
-.theme-toggle { background: var(--bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; font-size: 13px; display: flex; align-items: center; gap: 6px; font-family: var(--font-en); font-weight: 600; }
+.theme-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.theme-toggle:hover { color: var(--text); }
 @media(max-width: 850px) { .nav-links { display: none; } }
 
 /* Hero */
-.hero { max-width: 1000px; margin: 0 auto; padding: clamp(140px, 25vh, 240px) var(--pad) 80px; text-align: center; position: relative; }
-/* Background Glow */
-.hero::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); z-index: -1; filter: blur(40px); }
-.hero-role { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; display: inline-block; background: rgba(99, 102, 241, 0.1); padding: 8px 16px; border-radius: 99px; }
-h1 { font-size: clamp(48px, 10vw, 100px); font-weight: 700; letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; background: linear-gradient(135deg, var(--text), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-tagline { font-size: clamp(18px, 3vw, 24px); color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+.hero { max-width: 1000px; margin: 0 auto; padding: clamp(120px, 20vh, 200px) var(--pad) 80px; text-align: center; border-bottom: 1px solid var(--border); }
+.hero-role { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; display: inline-block; }
+h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.3; margin-bottom: 24px; letter-spacing: -1px; }
+.hero-tagline { font-size: clamp(18px, 2vw, 22px); color: var(--text-muted); max-width: 600px; margin: 0 auto; font-family: var(--font-serif); }
 
 /* Sections */
-.container { max-width: 1100px; margin: 0 auto; padding: 0 var(--pad) 80px; }
-.section-header { margin-bottom: 40px; text-align: center; }
-.section-title { font-size: clamp(32px, 5vw, 48px); font-weight: 600; letter-spacing: -1px; margin-bottom: 12px; }
-.section-desc { color: var(--text-muted); font-size: 18px; }
+.container { max-width: 1000px; margin: 0 auto; padding: 0 var(--pad) 80px; }
+.section-block { padding: 80px 0; border-bottom: 1px solid var(--border); }
+.section-header { margin-bottom: 48px; }
+.section-title { font-size: clamp(28px, 4vw, 40px); margin-bottom: 12px; }
+.section-desc { color: var(--text-muted); font-size: 17px; }
 
-/* Gallery Grid (Modern Cards) */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; display: flex; flex-direction: column; }
-.card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
-.card-img-wrap { width: 100%; aspect-ratio: 4/3; background: var(--bg); position: relative; overflow: hidden; }
-.card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-.card:hover .card-img-wrap img { transform: scale(1.05); }
-/* সুন্দর গ্রেডিয়েন্ট প্লেসহোল্ডার */
-.card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 30px; text-align: center; font: 600 24px var(--font-bn); color: #fff; background: linear-gradient(135deg, var(--accent), #8b5cf6); text-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: transform 0.4s; }
-.card:hover .card-placeholder { transform: scale(1.02); }
-.card-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
-.card-title { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+/* Gallery Grid (Clean & Minimal) */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -10px rgba(0,0,0,0.05); }
+.card-img-wrap { width: 100%; aspect-ratio: 16/9; background: var(--bg); position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+.card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.card:hover .card-img-wrap img { transform: scale(1.03); }
+/* ছবি না থাকলে সুন্দর মিনিমাল প্লেসহোল্ডার */
+.card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; font: 500 20px var(--font-serif); color: var(--text-muted); background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px); }
+.card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.card-title { font-size: 20px; margin-bottom: 8px; }
 .card-text { color: var(--text-muted); font-size: 15px; flex: 1; line-height: 1.6; }
 
-/* Notebook Grid (Timeline Style) */
-.notes-list { display: flex; flex-direction: column; gap: 20px; max-width: 800px; margin: 0 auto; }
-.note-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); transition: all 0.3s; position: relative; overflow: hidden; }
-.note-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); opacity: 0; transition: opacity 0.3s; }
-.note-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-.note-item:hover::before { opacity: 1; }
-.note-title { font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+/* Notebook List (Editorial) */
+.notes-list { display: flex; flex-direction: column; gap: 24px; }
+.note-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; transition: border-color 0.3s; }
+.note-item:hover { border-color: var(--accent); }
+.note-title { font-size: 22px; margin-bottom: 12px; color: var(--accent); }
 .note-text { color: var(--text-muted); line-height: 1.8; font-size: 16px; white-space: pre-wrap; }
-.note-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; color: var(--accent); font-weight: 600; font-size: 15px; transition: gap 0.2s; }
-.note-link:hover { gap: 10px; }
+.note-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; color: var(--text); font-weight: 500; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--text); padding-bottom: 2px; }
+.note-link:hover { color: var(--accent); border-color: var(--accent); }
 
 /* Contact Form */
-.contact-section { max-width: 700px; margin: 0 auto 100px; padding: 0 var(--pad); }
-.contact-form { background: var(--surface); padding: clamp(24px, 5vw, 48px); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+.contact-section { max-width: 700px; margin: 0 auto; padding: 80px 0; }
+.contact-form { background: var(--surface); padding: clamp(24px, 5vw, 48px); border-radius: var(--radius); border: 1px solid var(--border); }
 .form-group { margin-bottom: 24px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 15px; color: var(--text); }
-.form-group input, .form-group textarea { width: 100%; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); font: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
-.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
-.submit-btn { background: var(--accent); color: #fff; padding: 16px 32px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; transition: background 0.2s, transform 0.2s; }
-.submit-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
-.form-status { margin-top: 20px; padding: 16px; border-radius: 12px; text-align: center; font-weight: 500; display: none; }
-.form-status.success { background: rgba(34, 197, 94, 0.1); color: #16a34a; display: block; border: 1px solid rgba(34, 197, 94, 0.2); }
-.form-status.error { background: rgba(239, 68, 68, 0.1); color: #dc2626; display: block; border: 1px solid rgba(239, 68, 68, 0.2); }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text); }
+.form-group input, .form-group textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; transition: border-color 0.2s; }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); outline: none; }
+.submit-btn { background: var(--text); color: var(--bg); padding: 16px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; width: 100%; transition: opacity 0.2s; }
+.submit-btn:hover { opacity: 0.8; }
+.form-status { margin-top: 20px; padding: 16px; border-radius: 8px; text-align: center; font-weight: 500; display: none; font-size: 15px; }
+.form-status.success { background: rgba(34, 197, 94, 0.1); color: #16a34a; display: block; }
+.form-status.error { background: rgba(239, 68, 68, 0.1); color: #dc2626; display: block; }
 
 /* Footer */
-footer { border-top: 1px solid var(--border); padding: 40px var(--pad); text-align: center; color: var(--text-muted); font-size: 15px; }
+footer { border-top: 1px solid var(--border); padding: 40px var(--pad); text-align: center; color: var(--text-muted); font-size: 14px; }
 footer a { color: var(--text); margin: 0 12px; font-weight: 500; transition: color 0.2s; }
 footer a:hover { color: var(--accent); }
 
 /* Lightbox */
-#lb { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 24px; }
+#lb { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 24px; }
 #lb.on { display: flex; }
-.lb-content { background: var(--surface); border-radius: var(--radius); max-width: 900px; width: 100%; max-height: 90vh; overflow: auto; position: relative; border: 1px solid var(--border); animation: zoomIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.lb-content { background: var(--surface); border-radius: var(--radius); max-width: 800px; width: 100%; max-height: 90vh; overflow: auto; position: relative; border: 1px solid var(--border); }
 .lb-img { width: 100%; max-height: 60vh; object-fit: contain; background: #000; }
 .lb-body { padding: clamp(24px, 5vw, 40px); }
-.lb-title { font-size: 32px; font-weight: 600; margin-bottom: 16px; }
-.lb-text { color: var(--text-muted); font-size: 17px; line-height: 1.8; white-space: pre-wrap; }
-.lb-close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-.lb-close:hover { background: var(--bg); transform: rotate(90deg); }
+.lb-title { font-size: 28px; margin-bottom: 16px; }
+.lb-text { color: var(--text-muted); font-size: 16px; line-height: 1.8; white-space: pre-wrap; }
+.lb-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -155,12 +143,12 @@ footer a:hover { color: var(--accent); }
 
 <!-- Contact Form Section -->
 <section class="contact-section" id="contact">
-  <div class="section-header">
+  <div class="section-header" style="text-align: center;">
     <h2 class="section-title">যোগাযোগ করুন</h2>
     <p class="section-desc">কোনো কাজ, সহযোগিতা বা মতামত জানাতে চাইলে নিচের ফর্মটি পূরণ করুন।</p>
   </div>
   
-  <!-- FormSubmit.co ব্যবহার করা হয়েছে (Vercel-এর জন্য) -->
+  <!-- FormSubmit.co Integration -->
   <form class="contact-form" id="contact-form">
     <div class="form-group">
       <label>আপনার নাম</label>
@@ -223,7 +211,7 @@ function renderSections() {
   D.sections.forEach((sec) => {
     if (sec.id === 'contact') return; 
     
-    html += `<section id="${esc(sec.id)}" style="margin-bottom: 100px;">`;
+    html += `<section id="${esc(sec.id)}" class="section-block">`;
     html += `
       <div class="section-header">
         <h2 class="section-title">${esc(sec.name)}</h2>
@@ -240,7 +228,7 @@ function renderSections() {
             </div>
             <div class="card-body">
               <h3 class="card-title">${esc(item.title)}</h3>
-              <p class="card-text">${esc(String(item.text||'').slice(0, 85))}...</p>
+              <p class="card-text">${esc(String(item.text||'').slice(0, 80))}...</p>
             </div>
           </div>`;
       });
@@ -252,7 +240,7 @@ function renderSections() {
           <div class="note-item">
             <h3 class="note-title">${esc(item.title)}</h3>
             <p class="note-text">${esc(item.text)}</p>
-            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="note-link">লিংক দেখুন <span>→</span></a>` : ''}
+            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="note-link">লিংক দেখুন →</a>` : ''}
           </div>`;
       });
       html += '</div>';
@@ -272,7 +260,7 @@ function openLB(secId, itemIndex) {
     <div class="lb-body">
       <h3 class="lb-title">${esc(item.title)}</h3>
       <p class="lb-text">${esc(item.text)}</p>
-      ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="note-link" style="margin-top:20px;">লিংক দেখুন <span>→</span></a>` : ''}
+      ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="note-link" style="margin-top:20px;">লিংক দেখুন →</a>` : ''}
     </div>`;
   $('#lb').classList.add('on');
   document.body.style.overflow = 'hidden';
@@ -283,7 +271,7 @@ function closeLB() {
 }
 $('#lb').addEventListener('click', e => { if(e.target.id === 'lb') closeLB(); });
 
-// ✅ Contact Form Submission (FormSubmit.co for Vercel)
+// ✅ Form Submission (FormSubmit.co)
 $('#contact-form').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = $('#submit-btn');
@@ -298,7 +286,6 @@ $('#contact-form').addEventListener('submit', async e => {
   const json = JSON.stringify(object);
 
   try {
-    // FormSubmit.co API (সরাসরি ইমেইলে যাবে)
     const res = await fetch("https://formsubmit.co/ajax/sukeshkhisa1@gmail.com", {
       method: "POST",
       headers: { 
