@@ -108,12 +108,12 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
   <div id="set">
     <div class="row">
       <div><label>GitHub Repo</label><input id="repo" placeholder="username/repo"></div>
-      <div><label>Branch</label><input id="br" value="main"></div>
+      <div><label>GitHub Branch</label><input id="br" value="main"></div>
       <div><label>GitHub Token</label><input id="tk" type="password" placeholder="github_pat_..."></div>
-      <div><label>Netlify Site ID</label><input id="netlify-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
-      <div><label>Netlify Token</label><input id="netlify-tk" type="password" placeholder="Netlify Personal Access Token"></div>
+      <div><label>Getform Form ID</label><input id="getform-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
+      <div><label>Getform API Key</label><input id="getform-tk" type="password" placeholder="Getform API Token"></div>
     </div>
-    <p>💡 Netlify Token তৈরি করতে: Netlify Dashboard > User Settings > Applications > Personal access tokens। Site ID পাবেন: Site Settings > General > Site ID।</p>
+    <p>💡 <b>GitHub Token:</b> Settings > Developer settings > Fine-grained tokens (Contents: Read and Write). <br>💡 <b>Getform API:</b> Getform Dashboard > Settings > API Key.</p>
   </div>
 
   <main id="view-content">
@@ -283,36 +283,29 @@ function up(j, inp){
   }
 }
 
-// ================= MESSAGES LOGIC =================
+// ================= GETFORM MESSAGES LOGIC =================
 async function fetchMessages(){
-  const siteId = $('netlify-id').value.trim();
-  const token = $('netlify-tk').value.trim();
+  const formId = $('getform-id').value.trim();
+  const apiKey = $('getform-tk').value.trim();
   
-  if(!siteId || !token) {
-    $('msg-list').innerHTML = '<div class="empty-state"><span>⚙️</span> সেটিংস থেকে Netlify Site ID এবং Token দিন</div>';
+  if(!formId || !apiKey) {
+    $('msg-list').innerHTML = '<div class="empty-state"><span>⚙️</span> সেটিংস থেকে Getform Form ID এবং API Key দিন</div>';
     return;
   }
 
   try {
     $('msg-list').innerHTML = '<div style="padding:20px;text-align:center">লোড হচ্ছে...</div>';
     
-    // 1. Get Forms
-    const formsRes = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms`, {
-      headers: { Authorization: `Bearer ${token}` }
+    // Getform API endpoint
+    const res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
+      headers: { 'Accept': 'application/json' }
     });
-    if(!formsRes.ok) throw new Error("Forms fetch failed. Check Site ID and Token.");
-    const forms = await formsRes.json();
-    const contactForm = forms.find(f => f.name === 'contact');
     
-    if(!contactForm) throw new Error("Contact form not found. Please submit a test message first.");
+    if(!res.ok) throw new Error("API request failed. Check Form ID and API Key.");
     
-    // 2. Get Submissions
-    const subsRes = await fetch(`https://api.netlify.com/api/v1/forms/${contactForm.id}/submissions`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if(!subsRes.ok) throw new Error("Submissions fetch failed");
-    
-    currentMsgs = await subsRes.json();
+    const data = await res.json();
+    // Getform API returns an array of submissions in 'submissions' or directly
+    currentMsgs = data.submissions || data || [];
     
     if(currentMsgs.length === 0) {
       $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি</div>';
@@ -320,15 +313,19 @@ async function fetchMessages(){
     }
 
     // Sort by date descending
-    currentMsgs.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    currentMsgs.sort((a,b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
     
-    $('msg-list').innerHTML = currentMsgs.map((m, i) => `
+    $('msg-list').innerHTML = currentMsgs.map((m, i) => {
+      // Getform sometimes puts fields inside a 'data' or 'fields' object
+      const fields = m.fields || m.data || m;
+      return `
       <div class="msg-item" onclick="openMessage(${i})">
-        <h4>${esc(m.data.name)}</h4>
-        <p>${esc(m.data.message)}</p>
-        <small>${new Date(m.created_at).toLocaleString('bn-BD')}</small>
+        <h4>${esc(fields.name || 'Unknown')}</h4>
+        <p>${esc(fields.message || '')}</p>
+        <small>${new Date(m.created_at || m.date).toLocaleString('bn-BD')}</small>
       </div>
-    `).join('');
+      `;
+    }).join('');
 
   } catch(e) {
     $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}</div>`;
@@ -340,21 +337,23 @@ function openMessage(index){
   document.querySelectorAll('.msg-item')[index].classList.add('on');
   
   const m = currentMsgs[index];
-  const subject = encodeURIComponent(`Re: Contact from ${m.data.name}`);
-  const body = encodeURIComponent(`\n\n--- Original Message ---\nFrom: ${m.data.name} (${m.data.email})\n\n${m.data.message}`);
+  const fields = m.fields || m.data || m;
+  const email = fields.email || '';
+  const subject = encodeURIComponent(`Re: Contact from ${fields.name}`);
+  const body = encodeURIComponent(`\n\n--- Original Message ---\nFrom: ${fields.name} (${email})\n\n${fields.message}`);
   
   $('msg-view').innerHTML = `
-    <h3>${esc(m.data.name)}</h3>
+    <h3>${esc(fields.name)}</h3>
     <div class="meta">
-      <span>📧 ${esc(m.data.email)}</span>
-      <span>🕒 ${new Date(m.created_at).toLocaleString('bn-BD')}</span>
+      <span>📧 ${esc(email)}</span>
+      <span>🕒 ${new Date(m.created_at || m.date).toLocaleString('bn-BD')}</span>
     </div>
-    <div class="body">${esc(m.data.message)}</div>
+    <div class="body">${esc(fields.message)}</div>
     
     <div class="reply-box">
       <h4 style="margin:0 0 12px">রিপ্লাই দিন</h4>
       <textarea id="reply-text" placeholder="আপনার রিপ্লাই এখানে লিখুন..."></textarea>
-      <button class="p" onclick="sendReply('${esc(m.data.email)}', '${subject}')">📩 ইমেইলে রিপ্লাই পাঠান</button>
+      <button class="p" onclick="sendReply('${esc(email)}', '${subject}')">📩 ইমেইলে রিপ্লাই পাঠান</button>
     </div>
   `;
 }
@@ -368,7 +367,7 @@ function sendReply(email, subject){
   toast('ইমেইল অ্যাপ খোলা হচ্ছে...');
 }
 
-// ================= CORE / GITHUB =================
+// ================= GITHUB API =================
 function genAgent(){
   const s = C.site;
   const n = s.en ? `${s.title} (${s.en})` : s.title;
@@ -414,8 +413,8 @@ async function save(){
     repo: $('repo').value.trim(),
     br: $('br').value.trim() || 'main',
     tk: $('tk').value.trim(),
-    netlifyId: $('netlify-id').value.trim(),
-    netlifyTk: $('netlify-tk').value.trim()
+    getformId: $('getform-id').value.trim(),
+    getformTk: $('getform-tk').value.trim()
   };
   localStorage.adm = JSON.stringify(cfg);
   
@@ -457,8 +456,8 @@ async function initApp(){
   $('repo').value = cfg.repo || '';
   $('br').value = cfg.br || 'main';
   $('tk').value = cfg.tk || '';
-  $('netlify-id').value = cfg.netlifyId || '';
-  $('netlify-tk').value = cfg.netlifyTk || '';
+  $('getform-id').value = cfg.getformId || '';
+  $('getform-tk').value = cfg.getformTk || '';
   
   if(!cfg.tk) $('set').classList.add('on');
   
