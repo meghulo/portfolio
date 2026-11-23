@@ -6,27 +6,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Forminit API তে রিকোয়েস্ট পাঠানোর চেষ্টা (Bearer Token সহ)
-    let response = await fetch(`https://api.forminit.com/v1/forms/${formId}/submissions`, {
+    // Forminit API-তে সঠিক হেডার সহ রিকোয়েস্ট
+    const response = await fetch(`https://api.forminit.com/v1/forms/${formId}`, {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
         'X-API-Key': apiKey
       }
     });
-
-    // যদি প্রথম এন্ডপয়েন্ট ব্যর্থ হয়, তবে ভিন্ন এন্ডপয়েন্ট চেষ্টা করি
-    if (!response.ok) {
-      response = await fetch(`https://api.forminit.com/v1/forms/${formId}`, {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-          'X-API-Key': apiKey
-        }
-      });
-    }
     
-    // রেসপন্স ডেটা পাঠানো
     const data = await response.json();
     res.status(response.status).json(data);
     
