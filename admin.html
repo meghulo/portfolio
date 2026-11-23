@@ -374,18 +374,22 @@ function openMessage(index){
   document.querySelectorAll('.msg-item')[index].classList.add('on');
   
   const m = currentMsgs[index];
-  const fields = m.fields || m.data || m;
-  const email = fields.email || '';
-  const subject = encodeURIComponent(`Re: Contact from ${fields.name}`);
-  const body = encodeURIComponent(`\n\n--- Original Message ---\nFrom: ${fields.name} (${email})\n\n${fields.message}`);
+  const fields = m.fields || m.data || m.form_data || m;
+  const email = fields.email || fields.Email || 'no-email@provided.com';
+  const name = fields.name || fields.Name || 'Unknown';
+  const message = fields.message || fields.Message || '';
+  const dateStr = m.created_at || m.date || m.createdAt || new Date().toISOString();
+  
+  const subject = encodeURIComponent(`Re: Contact from ${name}`);
+  const body = encodeURIComponent(`\n\n--- Original Message ---\nFrom: ${name} (${email})\n\n${message}`);
   
   $('msg-view').innerHTML = `
-    <h3>${esc(fields.name)}</h3>
+    <h3>${esc(name)}</h3>
     <div class="meta">
       <span>📧 ${esc(email)}</span>
-      <span>🕒 ${new Date(m.created_at || m.date).toLocaleString('bn-BD')}</span>
+      <span>🕒 ${new Date(dateStr).toLocaleString('bn-BD')}</span>
     </div>
-    <div class="body">${esc(fields.message)}</div>
+    <div class="body">${esc(message)}</div>
     
     <div class="reply-box">
       <h4 style="margin:0 0 12px">রিপ্লাই দিন</h4>
