@@ -289,7 +289,7 @@ async function fetchMessages(){
   const apiKey = $('getform-tk').value.trim();
   
   if(!formId || !apiKey) {
-    $('msg-list').innerHTML = '<div class="empty-state"><span>⚙️</span> সেটিংস থেকে Getform Form ID এবং API Key দিন</div>';
+    $('msg-list').innerHTML = '<div class="empty-state"><span>⚙️</span> সেটিংস থেকে Form ID এবং API Key দিন</div>';
     return;
   }
 
@@ -298,23 +298,27 @@ async function fetchMessages(){
     
     let res, data, currentMsgs = [];
 
-    // প্রথমে লিগ্যাসি v1 এন্ডপয়েন্ট চেষ্টা করি (token query parameter)
-    res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (res.ok) {
-      data = await res.json();
-      // v1 রেসপন্স ফরম্যাট: সরাসরি অ্যারে অথবা { data: [...] }
-      currentMsgs = Array.isArray(data) ? data : (data.data || data.submissions || []);
-    } else {
-      // যদি v1 ব্যর্থ হয়, নতুন v2 এন্ডপয়েন্ট চেষ্টা করি (X-API-Key header)
-      console.warn('v1 failed, trying v2...');
+    // প্রথমে v2 (Forminit) এন্ডপয়েন্ট চেষ্টা করি
+    try {
       res = await fetch(`https://api.forminit.com/v1/forms/${formId}`, {
         headers: { 
           'Accept': 'application/json',
           'X-API-Key': apiKey
         }
+      });
+      
+      if (res.ok) {
+        data = await res.json();
+        currentMsgs = data.data?.submissions || data.submissions || data.data || [];
+      } else {
+        throw new Error(`v2 failed: ${res.status}`);
+      }
+    } catch (e2) {
+      console.warn('v2 failed, trying v1...', e2);
+      
+      // v2 ব্যর্থ হলে v1 (Legacy) চেষ্টা করি
+      res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
+        headers: { 'Accept': 'application/json' }
       });
       
       if (!res.ok) {
@@ -323,24 +327,17 @@ async function fetchMessages(){
       }
       
       data = await res.json();
-      // v2 রেসপন্স ফরম্যাট: { data: { submissions: [...] } }
-      currentMsgs = data.data?.submissions || data.submissions || data.data || [];
+      currentMsgs = Array.isArray(data) ? data : (data.data || data.submissions || []);
     }
 
-    // যদি রেসপন্সে submissions না থাকে, তাহলে পুরো ডেটাকেই অ্যারে হিসেবে ধরুন
-    if (!Array.isArray(currentMsgs) && currentMsgs && typeof currentMsgs === 'object') {
-      // যদি অবজেক্ট হয়, তাহলে সম্ভবত ключ 'submissions' বা 'data' এর ভেতরে আছে
-      currentMsgs = currentMsgs.submissions || currentMsgs.data || Object.values(currentMsgs);
-    }
-    
     if (!Array.isArray(currentMsgs)) currentMsgs = [];
 
     if(currentMsgs.length === 0) {
-      $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি (অথবা API রেসপন্স খালি)</div>';
+      $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি</div>';
       return;
     }
 
-    // তারিখ অনুযায়ী সাজান (নতুন আগে)
+    // তারিখ অনুযায়ী সাজান
     currentMsgs.sort((a,b) => {
       const dateA = new Date(a.created_at || a.date || a.createdAt || 0);
       const dateB = new Date(b.created_at || b.date || b.createdAt || 0);
@@ -348,7 +345,6 @@ async function fetchMessages(){
     });
     
     $('msg-list').innerHTML = currentMsgs.map((m, i) => {
-      // বিভিন্ন সম্ভাব্য ফিল্ড লোকেশন থেকে ডেটা বের করুন
       const fields = m.fields || m.data || m.form_data || m;
       const name = fields.name || fields.Name || 'Unknown';
       const message = fields.message || fields.Message || '';
@@ -365,7 +361,8 @@ async function fetchMessages(){
 
   } catch(e) {
     console.error('Getform fetch error:', e);
-    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>ব্রাউজারের Console (F12) চেক করুন বিস্তারিত জানতে।</small></div>`;
+    // এরর মেসেজে API থেকে প্রাপ্ত বিস্তারিত তথ্য দেখান
+    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>ব্রাউজারের Console (F12) চেক করুন।</small></div>`;
   }
 }
 
