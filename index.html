@@ -72,12 +72,11 @@ h1 { font-size: clamp(48px, 10vw, 120px); line-height: 1.1; letter-spacing: -2px
 
 /* Gallery Grid (Poster Style) */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
-.card { cursor: pointer; display: flex; flex-direction: column; group: true; }
+.card { cursor: pointer; display: flex; flex-direction: column; }
 .card-img-wrap { width: 100%; aspect-ratio: 4/5; background: var(--surface); border: 1px solid var(--border); position: relative; overflow: hidden; margin-bottom: 20px; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .card:hover .card-img-wrap { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
 .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
 .card:hover .card-img-wrap img { transform: scale(1.05); }
-/* গorgeous Poster Placeholder */
 .card-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; background: linear-gradient(135deg, #1a1a1a, #333); color: #fff; position: relative; }
 .card-placeholder::before { content: ''; position: absolute; inset: 15px; border: 1px solid rgba(255,255,255,0.2); }
 .card-placeholder span { font-family: var(--font-serif); font-size: 28px; line-height: 1.4; z-index: 1; }
@@ -129,6 +128,8 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
 .lb-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s; }
 .lb-close:hover { transform: rotate(90deg); }
 </style>
+<!-- ✅ Forminit SDK -->
+<script src="https://forminit.com/sdk.js"></script>
 </head>
 <body>
 
@@ -160,18 +161,19 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
     <p class="section-desc" style="margin: 0 auto;">কাজ বা সহযোগিতার জন্য সরাসরি মেসেজ পাঠান।</p>
   </div>
   
-  <form class="contact-form" id="contact-form">
+  <!-- ✅ Forminit Integration -->
+  <form class="contact-form" id="contact-form" action="https://forminit.com/f/6vkq7zu2e7q" method="POST" enctype="multipart/form-data">
     <div class="form-group">
       <label>আপনার নাম</label>
-      <input type="text" name="name" required placeholder="আপনার নাম লিখুন">
+      <input type="text" name="fi-sender-fullName" required placeholder="আপনার নাম লিখুন">
     </div>
     <div class="form-group">
       <label>ইমেইল ঠিকানা</label>
-      <input type="email" name="email" required placeholder="you@example.com">
+      <input type="email" name="fi-sender-email" required placeholder="you@example.com">
     </div>
     <div class="form-group">
       <label>মেসেজ</label>
-      <textarea name="message" required placeholder="বিস্তারিত লিখুন..."></textarea>
+      <textarea name="fi-text-message" required placeholder="বিস্তারিত লিখুন..."></textarea>
     </div>
     <button type="submit" class="submit-btn" id="submit-btn">মেসেজ পাঠান</button>
     <div id="form-status" class="form-status"></div>
@@ -289,7 +291,7 @@ function closeLB() {
 }
 $('#lb').addEventListener('click', e => { if(e.target.id === 'lb') closeLB(); });
 
-// ✅ Form Submission (FormSubmit.co)
+// ✅ Forminit Form Submission
 $('#contact-form').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = $('#submit-btn');
@@ -300,27 +302,21 @@ $('#contact-form').addEventListener('submit', async e => {
   status.textContent = '';
 
   const formData = new FormData(e.target);
-  const object = Object.fromEntries(formData);
-  const json = JSON.stringify(object);
 
   try {
-    const res = await fetch("https://formsubmit.co/ajax/sukeshkhisa1@gmail.com", {
-      method: "POST",
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: json
-    });
+    // Forminit SDK API Call
+    const res = await Forminit.submit('6vkq7zu2e7q', formData);
     
-    if (res.ok) {
-      status.textContent = '✅ আপনার মেসেজ সফলভাবে পাঠানো হয়েছে!';
-      status.className = 'form-status success';
-      e.target.reset();
-    } else {
-      throw new Error('Failed');
+    // Check if API returned an error object
+    if (res && res.error) {
+      throw new Error(res.error);
     }
+
+    status.textContent = '✅ আপনার মেসেজ সফলভাবে পাঠানো হয়েছে!';
+    status.className = 'form-status success';
+    e.target.reset();
   } catch (err) {
+    console.error('Forminit Error:', err);
     status.textContent = '❌ দুঃখিত, মেসেজ পাঠানো সম্ভব হয়নি। আবার চেষ্টা করুন।';
     status.className = 'form-status error';
   } finally {
