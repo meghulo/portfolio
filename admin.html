@@ -283,7 +283,7 @@ function up(j, inp){
   }
 }
 
-// ================= GETFORM MESSAGES LOGIC (v1 + v2 Compatible) =================
+// ================= GETFORM MESSAGES (VIA VERCEL PROXY) =================
 async function fetchMessages(){
   const formId = $('getform-id').value.trim();
   const apiKey = $('getform-tk').value.trim();
@@ -296,40 +296,18 @@ async function fetchMessages(){
   try {
     $('msg-list').innerHTML = '<div style="padding:20px;text-align:center">লোড হচ্ছে...</div>';
     
-    let res, data, currentMsgs = [];
-
-    // প্রথমে v2 (Forminit) এন্ডপয়েন্ট চেষ্টা করি
-    try {
-      res = await fetch(`https://api.forminit.com/v1/forms/${formId}`, {
-        headers: { 
-          'Accept': 'application/json',
-          'X-API-Key': apiKey
-        }
-      });
-      
-      if (res.ok) {
-        data = await res.json();
-        currentMsgs = data.data?.submissions || data.submissions || data.data || [];
-      } else {
-        throw new Error(`v2 failed: ${res.status}`);
-      }
-    } catch (e2) {
-      console.warn('v2 failed, trying v1...', e2);
-      
-      // v2 ব্যর্থ হলে v1 (Legacy) চেষ্টা করি
-      res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
-        headers: { 'Accept': 'application/json' }
-      });
-      
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`API Error (${res.status}): ${errText || 'Check Form ID and API Key'}`);
-      }
-      
-      data = await res.json();
-      currentMsgs = Array.isArray(data) ? data : (data.data || data.submissions || []);
+    // Vercel Serverless Proxy API Call (CORS fix)
+    const res = await fetch(`/api/getform?formId=${formId}&apiKey=${apiKey}`);
+    
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`API Error (${res.status}): ${errText || 'Check Form ID and API Key'}`);
     }
 
+    const data = await res.json();
+    
+    // Handle various Getform/Forminit response structures
+    currentMsgs = data.submissions || data.data?.submissions || data.data || data || [];
     if (!Array.isArray(currentMsgs)) currentMsgs = [];
 
     if(currentMsgs.length === 0) {
@@ -337,7 +315,7 @@ async function fetchMessages(){
       return;
     }
 
-    // তারিখ অনুযায়ী সাজান
+    // Sort by date descending
     currentMsgs.sort((a,b) => {
       const dateA = new Date(a.created_at || a.date || a.createdAt || 0);
       const dateB = new Date(b.created_at || b.date || b.createdAt || 0);
@@ -361,8 +339,7 @@ async function fetchMessages(){
 
   } catch(e) {
     console.error('Getform fetch error:', e);
-    // এরর মেসেজে API থেকে প্রাপ্ত বিস্তারিত তথ্য দেখান
-    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>ব্রাউজারের Console (F12) চেক করুন।</small></div>`;
+    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>নিশ্চিত করুন api/getform.js ফাইলটি Vercel-এ আপলোড করা আছে।</small></div>`;
   }
 }
 
