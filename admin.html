@@ -74,7 +74,7 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
 .msg-view .body{font-size:16px;line-height:1.8;white-space:pre-wrap;background:#f8fafc;padding:20px;border-radius:8px;border:1px solid var(--line);margin-bottom:24px}
 .reply-box{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px}
 .reply-box textarea{width:100%;min-height:120px;margin-bottom:12px;resize:vertical}
-.empty-state{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:12px}
+.empty-state{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:12px;text-align:center;padding:20px}
 .empty-state span{font-size:48px}
 
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:99px;display:none;z-index:100;max-width:92vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
@@ -110,10 +110,10 @@ input:focus,textarea:focus{border-color:var(--accent);outline:none;background:#f
       <div><label>GitHub Repo</label><input id="repo" placeholder="username/repo"></div>
       <div><label>GitHub Branch</label><input id="br" value="main"></div>
       <div><label>GitHub Token</label><input id="tk" type="password" placeholder="github_pat_..."></div>
-      <div><label>Getform Form ID</label><input id="getform-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></div>
-      <div><label>Getform API Key</label><input id="getform-tk" type="password" placeholder="Getform API Token"></div>
+      <div><label>Forminit Form ID</label><input id="getform-id" placeholder="6vkq7zu2e7q"></div>
+      <div><label>Forminit API Key</label><input id="getform-tk" type="password" placeholder="fi_..."></div>
     </div>
-    <p>💡 <b>GitHub Token:</b> Settings > Developer settings > Fine-grained tokens (Contents: Read and Write). <br>💡 <b>Getform API:</b> Getform Dashboard > Settings > API Key.</p>
+    <p>💡 <b>GitHub Token:</b> Settings > Developer settings > Fine-grained tokens (Contents: Read and Write). <br>💡 <b>Forminit API:</b> Forminit Dashboard > Settings > API Key.</p>
   </div>
 
   <main id="view-content">
@@ -283,7 +283,7 @@ function up(j, inp){
   }
 }
 
-// ================= GETFORM MESSAGES (VIA VERCEL PROXY) =================
+// ================= FORMINT MESSAGES (VIA VERCEL PROXY) =================
 async function fetchMessages(){
   const formId = $('getform-id').value.trim();
   const apiKey = $('getform-tk').value.trim();
@@ -296,18 +296,21 @@ async function fetchMessages(){
   try {
     $('msg-list').innerHTML = '<div style="padding:20px;text-align:center">লোড হচ্ছে...</div>';
     
-    // Vercel Serverless Proxy API Call (CORS fix)
+    // Vercel Serverless Proxy API Call
     const res = await fetch(`/api/getform?formId=${formId}&apiKey=${apiKey}`);
     
+    let data = await res.json();
+    
+    // 401 বা API লিমিট এরর চেক করা
+    if (res.status === 401 || (data && data.error === 'NOT_AUTHENTICATED')) {
+      throw new Error("API Limit Exceeded অথবা API Key ভুল। Forminit ড্যাশবোর্ডে গিয়ে সরাসরি মেসেজ চেক করুন।");
+    }
     if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`API Error (${res.status}): ${errText || 'Check Form ID and API Key'}`);
+      throw new Error(`API Error (${res.status}): ${data.message || 'Unknown error'}`);
     }
 
-    const data = await res.json();
-    
-    // Handle various Getform/Forminit response structures
-    currentMsgs = data.submissions || data.data?.submissions || data.data || data || [];
+    // Handle various response structures
+    currentMsgs = data.data?.submissions || data.submissions || data.data || data || [];
     if (!Array.isArray(currentMsgs)) currentMsgs = [];
 
     if(currentMsgs.length === 0) {
@@ -324,7 +327,7 @@ async function fetchMessages(){
     
     $('msg-list').innerHTML = currentMsgs.map((m, i) => {
       const fields = m.fields || m.data || m.form_data || m;
-      const name = fields.name || fields.Name || 'Unknown';
+      const name = fields.name || fields.fullName || fields.Name || 'Unknown';
       const message = fields.message || fields.Message || '';
       const dateStr = m.created_at || m.date || m.createdAt || new Date().toISOString();
       
@@ -338,8 +341,8 @@ async function fetchMessages(){
     }).join('');
 
   } catch(e) {
-    console.error('Getform fetch error:', e);
-    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>নিশ্চিত করুন api/getform.js ফাইলটি Vercel-এ আপলোড করা আছে।</small></div>`;
+    console.error('Forminit fetch error:', e);
+    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>বিস্তারিত জানতে ব্রাউজারের Console (F12) চেক করুন।</small></div>`;
   }
 }
 
@@ -350,7 +353,7 @@ function openMessage(index){
   const m = currentMsgs[index];
   const fields = m.fields || m.data || m.form_data || m;
   const email = fields.email || fields.Email || 'no-email@provided.com';
-  const name = fields.name || fields.Name || 'Unknown';
+  const name = fields.name || fields.fullName || fields.Name || 'Unknown';
   const message = fields.message || fields.Message || '';
   const dateStr = m.created_at || m.date || m.createdAt || new Date().toISOString();
   
