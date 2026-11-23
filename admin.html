@@ -283,7 +283,7 @@ function up(j, inp){
   }
 }
 
-// ================= GETFORM MESSAGES LOGIC =================
+// ================= GETFORM MESSAGES LOGIC (v1 + v2 Compatible) =================
 async function fetchMessages(){
   const formId = $('getform-id').value.trim();
   const apiKey = $('getform-tk').value.trim();
@@ -296,39 +296,76 @@ async function fetchMessages(){
   try {
     $('msg-list').innerHTML = '<div style="padding:20px;text-align:center">লোড হচ্ছে...</div>';
     
-    // Getform API endpoint
-    const res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
+    let res, data, currentMsgs = [];
+
+    // প্রথমে লিগ্যাসি v1 এন্ডপয়েন্ট চেষ্টা করি (token query parameter)
+    res = await fetch(`https://api.getform.io/v1/forms/${formId}?token=${apiKey}`, {
       headers: { 'Accept': 'application/json' }
     });
+
+    if (res.ok) {
+      data = await res.json();
+      // v1 রেসপন্স ফরম্যাট: সরাসরি অ্যারে অথবা { data: [...] }
+      currentMsgs = Array.isArray(data) ? data : (data.data || data.submissions || []);
+    } else {
+      // যদি v1 ব্যর্থ হয়, নতুন v2 এন্ডপয়েন্ট চেষ্টা করি (X-API-Key header)
+      console.warn('v1 failed, trying v2...');
+      res = await fetch(`https://api.forminit.com/v1/forms/${formId}`, {
+        headers: { 
+          'Accept': 'application/json',
+          'X-API-Key': apiKey
+        }
+      });
+      
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`API Error (${res.status}): ${errText || 'Check Form ID and API Key'}`);
+      }
+      
+      data = await res.json();
+      // v2 রেসপন্স ফরম্যাট: { data: { submissions: [...] } }
+      currentMsgs = data.data?.submissions || data.submissions || data.data || [];
+    }
+
+    // যদি রেসপন্সে submissions না থাকে, তাহলে পুরো ডেটাকেই অ্যারে হিসেবে ধরুন
+    if (!Array.isArray(currentMsgs) && currentMsgs && typeof currentMsgs === 'object') {
+      // যদি অবজেক্ট হয়, তাহলে সম্ভবত ключ 'submissions' বা 'data' এর ভেতরে আছে
+      currentMsgs = currentMsgs.submissions || currentMsgs.data || Object.values(currentMsgs);
+    }
     
-    if(!res.ok) throw new Error("API request failed. Check Form ID and API Key.");
-    
-    const data = await res.json();
-    // Getform API returns an array of submissions in 'submissions' or directly
-    currentMsgs = data.submissions || data || [];
-    
+    if (!Array.isArray(currentMsgs)) currentMsgs = [];
+
     if(currentMsgs.length === 0) {
-      $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি</div>';
+      $('msg-list').innerHTML = '<div class="empty-state"><span>📭</span> এখনো কোনো মেসেজ আসেনি (অথবা API রেসপন্স খালি)</div>';
       return;
     }
 
-    // Sort by date descending
-    currentMsgs.sort((a,b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+    // তারিখ অনুযায়ী সাজান (নতুন আগে)
+    currentMsgs.sort((a,b) => {
+      const dateA = new Date(a.created_at || a.date || a.createdAt || 0);
+      const dateB = new Date(b.created_at || b.date || b.createdAt || 0);
+      return dateB - dateA;
+    });
     
     $('msg-list').innerHTML = currentMsgs.map((m, i) => {
-      // Getform sometimes puts fields inside a 'data' or 'fields' object
-      const fields = m.fields || m.data || m;
+      // বিভিন্ন সম্ভাব্য ফিল্ড লোকেশন থেকে ডেটা বের করুন
+      const fields = m.fields || m.data || m.form_data || m;
+      const name = fields.name || fields.Name || 'Unknown';
+      const message = fields.message || fields.Message || '';
+      const dateStr = m.created_at || m.date || m.createdAt || new Date().toISOString();
+      
       return `
       <div class="msg-item" onclick="openMessage(${i})">
-        <h4>${esc(fields.name || 'Unknown')}</h4>
-        <p>${esc(fields.message || '')}</p>
-        <small>${new Date(m.created_at || m.date).toLocaleString('bn-BD')}</small>
+        <h4>${esc(name)}</h4>
+        <p>${esc(message)}</p>
+        <small>${new Date(dateStr).toLocaleString('bn-BD')}</small>
       </div>
       `;
     }).join('');
 
   } catch(e) {
-    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}</div>`;
+    console.error('Getform fetch error:', e);
+    $('msg-list').innerHTML = `<div class="empty-state"><span>❌</span> এরর: ${esc(e.message)}<br><br><small>ব্রাউজারের Console (F12) চেক করুন বিস্তারিত জানতে।</small></div>`;
   }
 }
 
