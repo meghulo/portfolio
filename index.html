@@ -110,6 +110,7 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
 .lb-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s; }
 .lb-close:hover { transform: rotate(90deg); }
 </style>
+<!-- ✅ Include Forminit SDK -->
 <script src="https://forminit.com/sdk/v1/forminit.js"></script>
 </head>
 <body>
@@ -134,21 +135,23 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
     <h2 class="section-title">যোগাযোগ</h2>
     <p class="section-desc" style="margin: 0 auto;">কাজ বা সহযোগিতার জন্য সরাসরি মেসেজ পাঠান।</p>
   </div>
-  <form class="contact-form" id="contact-form" action="https://forminit.com/f/6vkq7zu2e7q" method="POST" enctype="multipart/form-data">
+  
+  <!-- Your Form -->
+  <form class="contact-form" id="contact-form" enctype="multipart/form-data">
     <div class="form-group">
       <label>আপনার নাম</label>
-      <input type="text" name="fi-sender-fullName" required placeholder="আপনার নাম লিখুন">
+      <input type="text" name="fi-sender-fullName" placeholder="আপনার নাম লিখুন" required>
     </div>
     <div class="form-group">
       <label>ইমেইল ঠিকানা</label>
-      <input type="email" name="fi-sender-email" required placeholder="you@example.com">
+      <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
     </div>
     <div class="form-group">
       <label>মেসেজ</label>
-      <textarea name="fi-text-message" required placeholder="বিস্তারিত লিখুন..."></textarea>
+      <textarea name="fi-text-message" placeholder="বিস্তারিত লিখুন..." required></textarea>
     </div>
     <button type="submit" class="submit-btn" id="submit-btn">মেসেজ পাঠান</button>
-    <div id="form-status" class="form-status"></div>
+    <p id="form-status" class="form-status"></p>
   </form>
 </section>
 <footer>
@@ -258,38 +261,43 @@ function closeLB() {
 }
 $('#lb').addEventListener('click', e => { if(e.target.id === 'lb') closeLB(); });
 
-// ✅ Forminit Form Submission (Corrected SDK Initialization)
-const forminit = new Forminit(); // Initialize the SDK instance
+// ✅ Forminit Form Submission
+const forminit = new Forminit();
+const FORM_ID = "6vkq7zu2e7q";
 
-$('#contact-form').addEventListener('submit', async e => {
+document.getElementById("contact-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const btn = $('#submit-btn');
-  const status = $('#form-status');
+
+  const btn = document.getElementById('submit-btn');
+  const status = document.getElementById('form-status');
+  
   btn.disabled = true;
   btn.textContent = 'পাঠানো হচ্ছে...';
   status.className = 'form-status';
   status.textContent = '';
 
   const formData = new FormData(e.target);
-
+  
   try {
-    const { data, error } = await forminit.submit('6vkq7zu2e7q', formData);
-    
+    const { data, error } = await forminit.submit(FORM_ID, formData);
+
     if (error) {
-      throw new Error(error.message || 'Submission failed');
+      // Forminit থেকে আসা আসল এরর মেসেজটি স্ক্রিনে দেখানো হচ্ছে
+      status.textContent = '❌ ' + (error.message || JSON.stringify(error));
+      status.className = 'form-status error';
+      return;
     }
 
     status.textContent = '✅ আপনার মেসেজ সফলভাবে পাঠানো হয়েছে!';
     status.className = 'form-status success';
     e.target.reset();
   } catch (err) {
-    console.error('Forminit Error:', err);
-    status.textContent = '❌ দুঃখিত, মেসেজ পাঠানো সম্ভব হয়নি। আবার চেষ্টা করুন।';
+    status.textContent = '❌ নেটওয়ার্ক এরর: ' + err.message;
     status.className = 'form-status error';
   } finally {
     btn.disabled = false;
     btn.textContent = 'মেসেজ পাঠান';
-    setTimeout(() => { status.className = 'form-status'; }, 5000);
+    setTimeout(() => { status.className = 'form-status'; }, 7000);
   }
 });
 
